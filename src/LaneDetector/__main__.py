@@ -1,5 +1,4 @@
 from LaneDetector import Detector
-import matplotlib.pyplot as plt
 import time
 import cv2
 import sys
@@ -7,9 +6,11 @@ import os
 
 
 def main(arg_vars):
+    media_name = None
     if len(arg_vars) == 1:
         media_path = arg_vars[0] 
-        
+    elif len(arg_vars) == 2:
+        media_path, media_name = arg_vars
     else:
         print("ERROR: invalid argument list")
         print("|-----> please enter image, video path with supported arguments")
@@ -23,10 +24,13 @@ def main(arg_vars):
     detector = Detector()               
 
     if media_extension in supported_imgs:
-        img = plt.imread(media_path)
+        img = cv2.imread(media_path)
         # img = cv2.resize(img, None, fx=0.50, fy=0.50)
         ###############################################
         detectedImg = detector(img)
+        if media_name:
+            print(media_name)
+            cv2.imwrite("../assets/" + media_name, detectedImg)
         ###############################################
         cv2.imshow("detection", detectedImg)
         cv2.waitKey(0)
@@ -36,7 +40,9 @@ def main(arg_vars):
         fps = int(cap.get(cv2.CAP_PROP_FPS))
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-
+        if media_name:
+            fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+            vidWriter = cv2.VideoWriter("../assets/" + media_name, fourcc, fps, (width, height))
         while True:
             ret, frame = cap.read()
             if ret:
@@ -48,9 +54,12 @@ def main(arg_vars):
                 cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (15, 25),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 1, cv2.LINE_AA)
                 cv2.imshow("detection", detectedImg)
+                vidWriter.write(detectedImg)
                 k = cv2.waitKey(1)
                 if k & 0xFF == ord('q'):
                     break
+        cap.release()
+        vidWriter.release()
 
     else:
         print("ERROR: this file is not supported!")
