@@ -32,7 +32,7 @@ def main(arg_vars):
         cv2.waitKey(0)
 
     elif media_extension in supported_videos:
-        cap = cv2.VideoCapture(videoPath)
+        cap = cv2.VideoCapture(media_path)
         fps = int(cap.get(cv2.CAP_PROP_FPS))
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -42,7 +42,7 @@ def main(arg_vars):
             if ret:
                 t1 = time.time()
                 ###############################################
-                                # do something
+                detectedImg = detector(frame)
                 ###############################################
                 t2 = time.time()
                 cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (15, 25),

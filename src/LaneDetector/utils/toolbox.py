@@ -183,25 +183,6 @@ def drawRoIPoly(img, points):
     return img
 
 
-def getinitialCenters(warpedFrame):
-    """
-    Estimates the begining of the lane lines and locate its center points
-    by computing peaks in histogram and finding the y-axis from the first
-    white pixel and the x-axis from the bottom half and taking its median point
-
-    Returns
-    =======
-    initialLeftXCenter: (int) X-axis position of the left lane line
-    initialRightXCenter: (int) X-axis position of the right lane line
-    xPixsHisto: (np.ndarray) histogram of pixels of the given image along X-axis
-
-    @param warpedFrame: bird view binary image of the lane roi
-    """
-    xPixsHisto = np.sum(warpedFrame[warpedFrame.shape[0]//2:], axis=0)
-    midPoint = xPixsHisto.shape[0]//2
-    leftXcPoint = np.argmax(xPixsHisto[:midPoint])
-    rightXcPoint = np.argmax(xPixsHisto[midPoint:]) + midPoint
-    return leftXcPoint, rightXcPoint, xPixsHisto
 
 
 def predictXVal(y, params):
