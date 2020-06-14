@@ -1,19 +1,5 @@
-import cv2
 import numpy as np
-from time import time
-from decimal import Decimal
 import pickle
-import os
-
-
-def timeIt(func):
-    def wrapper(*args, **kwargs):
-        t1 = time()
-        ret = func(*args, **kwargs)
-        t2 = time()
-        print(f"function: {func.__name__}, time to execute: {(t2 - t1)}s")
-        return ret
-    return wrapper
 
 
 def updatePoints(event, x, y, flags, params):
@@ -34,6 +20,177 @@ def updatePoints(event, x, y, flags, params):
         else:
             points.append([x, y])
 
+        
+def save2File(path, obj):
+    """
+    Saves a data object to a local binary file
+
+    @param path: local path to store the object in
+    @param obj: data object to be saved.
+    """
+    with open(path, "wb") as wf:
+        pickle.dump(obj, wf)
+
+
+# @timeIt
+def loadFile(path):
+    """
+    Loads and Returns a data object from a local binary file
+
+    @param path: local path to store the object in
+    """
+    with open(path, "rb") as rf:
+        return pickle.load(rf)
+
+
+def plotPredictionTesting(warpedImg, leftLinePoints, rightLinePoints, margin):
+    """
+    Plot the detected lane boundries over a given image
+
+    @param warpedImg: (np.3darray) result of search plotted over
+    @param leftLinePoints: (tuple) lane lines points X, Y (np.ndarray)
+    @param rightLinePoints: (tuple) lane lines points X, Y (np.ndarray)
+    @param margin: (int) lane line detection boundry width
+    """
+    boundryMask = np.zeros_like(warpedImg)
+    leftLineLeftMargin = leftLinePoints[0] - margin, leftLinePoints[1]
+    leftLineRightMargin = leftLinePoints[0] + margin, leftLinePoints[1]
+    rightLineLeftMargin = rightLinePoints[0] - margin, rightLinePoints[1]
+    rightLineRightMargin = rightLinePoints[0] + margin, rightLinePoints[1]
+    leftLineLeftMargin = np.array(list(zip(*leftLineLeftMargin)), "int")
+    leftLineRightMargin = np.flipud(np.array(list(zip(*leftLineRightMargin)), "int"))
+    leftBoundry = list(np.vstack([leftLineLeftMargin, leftLineRightMargin]).reshape(1, -1, 2))
+    cv2.fillPoly(boundryMask, leftBoundry, (255, 255, 0))
+    rightLineLeftMargin = np.array(list(zip(*rightLineLeftMargin)), "int")
+    rightLineRightMargin = np.flipud(np.array(list(zip(*rightLineRightMargin)), "int"))
+    rightBoundry = list(np.vstack([rightLineLeftMargin, rightLineRightMargin]).reshape(1, -1, 2))
+    cv2.fillPoly(boundryMask, rightBoundry, (255, 255, 0))
+    outImg = cv2.addWeighted(warpedImg, 1, boundryMask, 0.2, 0)
+    return outImg
+
+    # @timeIt
+
+    def predictLaneLinesTest(warpedFrame, linesParams, margin):
+        """
+        Predicts lane line in a new frame based on previous detection from blind search
+
+        Returns
+        =======
+        outImg: (np.3darray) result of search plotted over
+        leftLinePoints: (tuple) lane lines points X, Y (np.ndarray)
+        rightLinePoints: (tuple) lane lines points X, Y (np.ndarray)
+
+        @param warpedFrame: (np.ndarray) bird view binary image of the lane roi
+        @param linesParams: (dict) previous fitted params
+        @param margin: (int) lane line detection boundry width
+        """
+        leftLineParams, rightLineParams = linesParams
+        noneZeroIds = warpedFrame.nonzero()
+        noneZeroXIds = np.array(noneZeroIds[1])
+        noneZeroYIds = np.array(noneZeroIds[0])
+
+        a, b, c = leftLineParams
+        leftLineLBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c - margin
+        leftLineRBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c + margin
+        a, b, c = rightLineParams
+        rightLineLBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c - margin
+        rightLineRBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c + margin
+
+        leftLineBoundryIds = (noneZeroXIds > leftLineLBoundry) & (noneZeroXIds < leftLineRBoundry)
+        rightLineBoundryIds = (noneZeroXIds > rightLineLBoundry) & (
+            noneZeroXIds < rightLineRBoundry)
+
+        leftLineBoundryX = noneZeroXIds[leftLineBoundryIds]
+        leftLineBoundryY = noneZeroYIds[leftLineBoundryIds]
+        rightLineBoundryX = noneZeroXIds[rightLineBoundryIds]
+        rightLineBoundryY = noneZeroYIds[rightLineBoundryIds]
+        outImg = np.dstack([warpedFrame, warpedFrame, warpedFrame])
+        outImg[leftLineBoundryY, leftLineBoundryX] = [255, 0, 0]
+        outImg[rightLineBoundryY, rightLineBoundryX] = [0, 0, 255]
+        linesParams, leftLinePoints, rightLinePoints = fitLaneLines(
+            (leftLineBoundryX, leftLineBoundryY),
+            (rightLineBoundryX, rightLineBoundryY),
+            warpedFrame.shape[0]-1
+        )
+        return outImg, linesParams, leftLinePoints, rightLinePoints
+
+
+def getLanePointsTests(warpedFrame, nWindows, windowWidth, pixelsThresh):
+    """
+    Applies blind search for the lane points (white pixels on black background)
+    using the sliding window algorithm starting from the centers of the histogram peaks
+
+    Returns
+    =======
+    outImg: (np.3darray) result of search plotted over
+    leftLinePoints: (tuple) lane lines points X, Y (np.ndarray)
+    rightLinePoints: (tuple) lane lines points X, Y (np.ndarray)
+
+    @param warpedFrame: (np.ndarray) bird view binary image of the lane roi
+    @param nWindows: (int) number of windows allowed to be stacked on top of each other
+    @param windowWidth: (int) window width (horizontal distance between diagonals)
+    @param pixelsThresh: (int) minimum points to be considered as part of the lane
+    """
+    leftLanePixelsIds = []
+    rightLanePixelsIds = []
+    noneZeroIds = warpedFrame.nonzero()
+    noneZeroXIds = np.array(noneZeroIds[1])
+    noneZeroYIds = np.array(noneZeroIds[0])
+    leftXcPoint, rightXcPoint, xPixsHisto = getinitialCenters(warpedFrame)
+    windowHeight = np.int(warpedFrame.shape[0] // nWindows)
+    rightCenter = (rightXcPoint, warpedFrame.shape[0] - windowHeight//2)
+    leftCenter = (leftXcPoint, warpedFrame.shape[0] - windowHeight//2)
+    outImg = np.dstack([warpedFrame, warpedFrame, warpedFrame])
+
+    for i in range(1, nWindows+1):
+        leftLinePt1 = (leftCenter[0]-windowWidth//2, leftCenter[1]-windowHeight//2)
+        leftLinePt2 = (leftCenter[0]+windowWidth//2, leftCenter[1]+windowHeight//2)
+        rightLinePt1 = (rightCenter[0]-windowWidth//2, rightCenter[1]-windowHeight//2)
+        rightLinePt2 = (rightCenter[0]+windowWidth//2, rightCenter[1]+windowHeight//2)
+        cv2.rectangle(outImg, leftLinePt1, leftLinePt2, (0, 255, 0), 3)
+        cv2.rectangle(outImg, rightLinePt1, rightLinePt2, (0, 255, 0), 3)
+
+        leftWindowXIds = (noneZeroXIds > leftLinePt1[0]) & (noneZeroXIds < leftLinePt2[0])
+        leftWindowYIds = (noneZeroYIds > leftLinePt1[1]) & (noneZeroYIds < leftLinePt2[1])
+        leftWindowPoints = leftWindowXIds & leftWindowYIds
+        rightWindowXIds = (noneZeroXIds > rightLinePt1[0]) & (noneZeroXIds < rightLinePt2[0])
+        rightWindowYIds = (noneZeroYIds > rightLinePt1[1]) & (noneZeroYIds < rightLinePt2[1])
+        rightWindowPoints = rightWindowXIds & rightWindowYIds
+
+        leftLanePixelsIds.append(leftWindowPoints)
+        rightLanePixelsIds.append(rightWindowPoints)
+
+        leftCenter = leftCenter[0], leftCenter[1] - windowHeight
+        if leftWindowPoints.sum() > pixelsThresh:
+            #         xC = np.int(np.median(noneZeroXIds[leftWindowPoints]))
+            lXc = np.int(noneZeroXIds[leftWindowPoints].mean())
+            leftCenter = (lXc, leftCenter[1])
+
+        rightCenter = rightCenter[0], rightCenter[1] - windowHeight
+        if rightWindowPoints.sum() > pixelsThresh:
+            #         xC = np.int(np.median(noneZeroXIds[leftWindowPoints]))
+            rXc = np.int(noneZeroXIds[rightWindowPoints].mean())
+            rightCenter = (rXc, rightCenter[1])
+
+    leftLanePixelsIds = np.sum(np.array(leftLanePixelsIds), axis=0).astype("bool")
+    rightLanePixelsIds = np.sum(np.array(rightLanePixelsIds), axis=0).astype("bool")
+    leftXPoints = noneZeroXIds[leftLanePixelsIds]
+    leftYPoints = noneZeroYIds[leftLanePixelsIds]
+    rightXPoints = noneZeroXIds[rightLanePixelsIds]
+    rightYPoints = noneZeroYIds[rightLanePixelsIds]
+    outImg[leftYPoints, leftXPoints] = [255, 0, 0]
+    outImg[rightYPoints, rightXPoints] = [0, 0, 255]
+    return outImg, (leftXPoints, leftYPoints), (rightXPoints, rightYPoints)
+
+
+
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 def drawRoIPoly(img, points):
     """
@@ -45,150 +202,7 @@ def drawRoIPoly(img, points):
     for pt in points:
         cv2.circle(img, pt, 7, (0, 0, 255), -1)
     cv2.polylines(img, [np.array(points)], True, (255, 0, 0), 2)
-
-
-# @timeIt
-def getSatThreshMask(hlsImg, minThresh, maxThresh=255):
-    """
-    Creates a binary mask of the lane for the saturation channel (color thresholding)
-
-    @param hlsImg: HLS image formate np.ndarray
-    @param minThresh: the minimum theshold anything below is black
-    @param maxThresh: the maximum theshold anything above is white
-    """
-    sChannel = hlsImg[:, :, 2]
-    satMask = np.zeros_like(sChannel)
-    satMask[(sChannel >= minThresh) & (sChannel <= maxThresh)] = 255
-    return satMask
-
-
-# @timeIt
-def getGRThreshMask(bgrImg, minThresh, maxThresh=255):
-    """
-    Creates a binary mask of the lane for the green and the red channel
-
-    @param bgrImg: (np.ndarray) BGR image
-    @param minThresh: the minimum theshold anything below is black
-    @param maxThresh: the maximum theshold anything above is white
-    """
-    g, r = bgrImg[:, :, 1], bgrImg[:, :, 2]
-    grMask = np.zeros_like(r)
-    grMask[((r >= minThresh) & (r <= maxThresh)) & (
-        (g >= 1.125*minThresh) & (g <= maxThresh))] = 255
-    return grMask
-
-
-# @timeIt
-def getHueThreshMask(hlsImg, minThresh, maxThresh=255):
-    """
-    Creates a binary mask of the lane for the hue channel (color thresholding)
-
-    @param hlsImg: HLS image formate np.ndarray
-    @param minThresh: the minimum theshold anything below is black
-    @param maxThresh: the maximum theshold anything above is white
-    """
-    hChannel = hlsImg[:, :, 0]
-    hueMask = np.zeros_like(hChannel)
-    hueMask[(hChannel <= minThresh) & (hChannel >= 0)] = 255
-    return hueMask
-
-
-# @timeIt
-def getSobelGrads(grayImg, axis="xy", K=9):
-    """
-    Creates a binary mask of the absolute edges Sobel gradients from a grayscale image
-
-    @param grayImg: Gray image formate np.ndarray
-    @param axis: the axis to extract gradients over
-    @param K: Sobel kernel size
-    """
-    if axis == "x":
-        xGrads = cv2.Sobel(grayImg, cv2.CV_64F, 1, 0, ksize=K)
-        absXSobel = np.absolute(xGrads)
-        return absXSobel
-    elif axis == "y":
-        yGrads = cv2.Sobel(grayImg, cv2.CV_64F, 0, 1, ksize=K)
-        absYSobel = np.absolute(yGrads)
-        return absYSobel
-    elif axis == "xy":
-        xGrads = cv2.Sobel(grayImg, cv2.CV_64F, 1, 0, ksize=K)
-        yGrads = cv2.Sobel(grayImg, cv2.CV_64F, 0, 1, ksize=K)
-        absXSobel = np.absolute(xGrads)
-        absYSobel = np.absolute(yGrads)
-        return absXSobel, absYSobel
-
-
-# @timeIt
-def getSobelMag(absGrads, minThresh, maxThresh):
-    """"
-    Applies gradient magnitude for the absGrads and returns binary edges mask
-
-    @param absGrads: np.ndarray of the absolute gradients binary mask
-    @param minThresh: the minimum theshold anything below is black
-    @param maxThresh: the maximum theshold anything above is white
-    """
-    if isinstance(absGrads, (list, tuple, np.ndarray)) and len(absGrads) == 2:
-        absXSobel, absYSobel = absGrads
-        sobelMag = np.sqrt(np.square(absXSobel) + np.square(absYSobel))
-        sobelMag = np.uint8(sobelMag * 255 / np.max(sobelMag))
-        edgesMask = np.zeros_like(sobelMag)
-        edgesMask[(sobelMag > minThresh) & (sobelMag < maxThresh)] = 255
-        return edgesMask
-    else:
-        sobelMag = np.sqrt(np.square(absGrads[-1]))
-        sobelMag = np.uint8(sobelMag * 255 / np.max(sobelMag))
-        edgesMask = np.zeros_like(sobelMag)
-        edgesMask[(sobelMag > minThresh) & (sobelMag < maxThresh)] = 255
-        return edgesMask
-
-
-# @timeIt
-def getSobelDir(absXSobel, absYSobel, minThresh, maxThresh):
-    """
-    Finds gradients direction of a given absolute gradients of an image
-
-    @param absXGrads: np.ndarray of the absolute gradients binary mask of X-axis
-    @param absYGrads: np.ndarray of the absolute gradients binary mask of Y-axis
-    @param minThresh: the minimum theshold anything below is black
-    @param maxThresh: the maximum theshold anything above is white
-    """
-    sobelMag = np.arctan2(absYSobel, absXSobel)
-    edgesMask = np.zeros_like(sobelMag)
-    edgesMask[(sobelMag >= minThresh) & (sobelMag <= maxThresh)] = 255
-    return edgesMask
-
-
-@timeIt
-def getLaneMask(bgrFrame, minLineThresh, maxLineThresh,
-                satThresh, hueThresh, redThresh, filterSize=5):
-    """
-    Applies color bluring, thresholding and edge detection on a bgr image
-    Returns lanes detected in a binary mask
-
-    @param bgrImg: (np.ndarray) BGR image
-    @param minLineThresh: minimum theshold for edge detector
-    @param maxLineThresh: maximum theshold for edge detector
-    @param satThresh: saturation channel threshold any value above is 255 else is 0
-    @param hueThresh: hue channel threshold any value above is 255 else is 0
-    @param redThresh: red, and green channel threshold any value above is 255 else is 0
-    """
-    # bgrFrame = cv2.medianBlur(bgrFrame, filterSize)
-    grayImg = cv2.cvtColor(bgrFrame, cv2.COLOR_BGR2GRAY)
-    # grayImg = cv2.GaussianBlur(grayImg, (filterSize, filterSize), 0)
-    hlsImg = cv2.cvtColor(bgrFrame, cv2.COLOR_BGR2HLS)
-    edgesMask = cv2.Canny(grayImg, minLineThresh, maxLineThresh)
-    # xGrads = getSobelGrads(grayImg, "x", K=5)
-    # edgesMask = getSobelMag([xGrads], minLineThresh, maxLineThresh)
-    _, satMask = cv2.threshold(hlsImg[:, :, 2], 175, 255, cv2.THRESH_BINARY)
-    _, hueMask = cv2.threshold(hlsImg[:, :, 2], 33, 255, cv2.THRESH_BINARY_INV)
-    _, redMask = cv2.threshold(bgrFrame[:, :, 2], 170, 255, cv2.THRESH_BINARY)
-    _, greenMask = cv2.threshold(bgrFrame[:, :, 1], 170, 255, cv2.THRESH_BINARY)
-    hueSatMask = cv2.bitwise_and(hueMask, satMask)
-    redGreenMask = cv2.bitwise_and(redMask, greenMask)
-    laneMask = cv2.bitwise_or(redGreenMask, hueSatMask)
-    outMask = cv2.bitwise_or(laneMask, edgesMask)
-    # cv2.imshow("0", outMask)
-    return outMask
+    return img
 
 
 def getinitialCenters(warpedFrame):
@@ -426,29 +440,6 @@ def warped2BirdPoly(bgrFrame, points, width, height):
     Matrix = cv2.getPerspectiveTransform(warpedPoints, birdPoints)
     warpedFrame = cv2.warpPerspective(bgrFrame, Matrix, (width, height))
     return warpedFrame, birdPoints
-
-
-# @timeIt
-def save2File(path, obj):
-    """
-    Saves a data object to a local binary file
-
-    @param path: local path to store the object in
-    @param obj: data object to be saved.
-    """
-    with open(path, "wb") as wf:
-        pickle.dump(obj, wf)
-
-
-# @timeIt
-def loadFile(path):
-    """
-    Loads and Returns a data object from a local binary file
-
-    @param path: local path to store the object in
-    """
-    with open(path, "rb") as rf:
-        return pickle.load(rf)
 
 
 @timeIt
