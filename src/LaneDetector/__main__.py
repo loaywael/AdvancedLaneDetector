@@ -1,3 +1,4 @@
+from LaneDetector import Detector
 import matplotlib.pyplot as plt
 import time
 import cv2
@@ -19,20 +20,13 @@ def main(arg_vars):
     print("extension: ", media_extension)
     supported_imgs = ["jpg", "png", "jpeg"]
     supported_videos = ["mp4"]
-    #>>>>>>>>>>>>>>>>>>> should be modified <<<<<<<<<<<<<<<<<
-    camModel = loadFile("camCalibMatCoeffs")
-    camMtx = camModel["camMtx"]
-    dstCoeffs = camModel["dstCoeffs"]
-
-    # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                        # Detector is here
-    # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    detector = Detector()               
 
     if media_extension in supported_imgs:
         img = plt.imread(media_path)
         # img = cv2.resize(img, None, fx=0.50, fy=0.50)
         ###############################################
-                        # do something
+        detectedImg = detector(img)
         ###############################################
         cv2.imshow("detection", detectedImg)
         cv2.waitKey(0)
