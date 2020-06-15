@@ -46,17 +46,17 @@ Detecting curved lane and computing radius of curvature
    $ python -m LaneDetector ../data/driving_datasets/project_video.mp4   
    ```
 
-</br></br></br>  
+  </br></br></br>  
 
 
 
-<h3 align=center>Project Demo</h3>
-<iframe width="640" height="360" src="https://bit.ly/3hrxTXx"></iframe>
-<table><tr>
-<td><img src="assets/test1.png" alt="lane detected in green" style="width: 100%;"/></td>
-<td><img src="assets/test2.png" alt="lane detected in green" style="width: 100%;"/></td>
-</tr></table>
-</br></br>
+  <h3 align=center>Project Demo</h3>
+  <iframe allowfullscreen="allowfullscreen" width="640" height="360" src="https://bit.ly/3hrxTXx"></iframe>
+  <table><tr>
+    <td><img src="assets/test1.png" alt="lane detected in green" style="width: 100%;"/></td>
+    <td><img src="assets/test2.png" alt="lane detected in green" style="width: 100%;"/></td>
+  </tr></table>
+  </br></br>
    
 ***
 
