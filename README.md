@@ -51,9 +51,9 @@ Detecting curved lane and computing radius of curvature
 
 
 <h3 align=center>Project Demo</h3>
-[<video width="640" height="360" controls>
+<video width="640" height="360" controls>
     <source src ="assets/output_video.webm" type="video/mp4">
-    <source src ="assets/output_video.ogg" type="video/ogg">]
+    <source src ="assets/output_video.ogg" type="video/ogg">
 your browser doesn't support this video tag.
 </video>
 <table><tr>
