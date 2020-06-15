@@ -47,12 +47,13 @@ Detecting curved lane and computing radius of curvature
    ```
 
 </br></br></br>  
+
+
+
 <h3 align=center>Project Demo</h3>
-<video width="640" height="360" controls>
-    <source src ="assets/output_video.mp4" type="video/mp4">
-    <source src ="assets/output_video.ogg" type="video/ogg">
-your browser doesn't support this video tag.
-</video>
+
+[![Project Demo](assets/test1.png)](assets/output_video.webm)
+
 <table><tr>
 <td><img src="assets/test1.png" alt="lane detected in green" style="width: 100%;"/></td>
 <td><img src="assets/test2.png" alt="lane detected in green" style="width: 100%;"/></td>
