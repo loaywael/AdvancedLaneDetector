@@ -51,11 +51,11 @@ Detecting curved lane and computing radius of curvature
 
 
 <h3 align=center>Project Demo</h3>
-<video width="640" height="360" controls>
-    <source src ="assets/output_video.webm" type="video/mp4">
-    <source src ="assets/output_video.ogg" type="video/ogg">
-your browser doesn't support this video tag.
-</video>
+
+<iframe width="640" height="360" 
+src="https://drive.google.com/file/d/1etUrwbFQ_1HoW3oVzEbVkFWH3llJXKMq/preview">
+</iframe>
+
 <table><tr>
 <td><img src="assets/test1.png" alt="lane detected in green" style="width: 100%;"/></td>
 <td><img src="assets/test2.png" alt="lane detected in green" style="width: 100%;"/></td>

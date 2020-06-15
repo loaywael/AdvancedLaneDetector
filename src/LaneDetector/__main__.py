@@ -41,7 +41,7 @@ def main(arg_vars):
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         if media_name:
-            fourcc = cv2.VideoWriter_fourcc(*"VP80")
+            fourcc = cv2.VideoWriter_fourcc(*"XVID")
             vidWriter = cv2.VideoWriter("../assets/" + media_name, fourcc, fps, (width, height))
         while True:
             ret, frame = cap.read()
