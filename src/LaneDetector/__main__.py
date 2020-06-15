@@ -52,7 +52,7 @@ def main(arg_vars):
                 ###############################################
                 t2 = time.time()
                 cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (15, 25),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 1, cv2.LINE_AA)
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
                 cv2.imshow("detection", detectedImg)
                 if media_name:
                     vidWriter.write(detectedImg)
@@ -60,7 +60,8 @@ def main(arg_vars):
                 if k & 0xFF == ord('q'):
                     break
         cap.release()
-        vidWriter.release()
+        if media_name:
+            vidWriter.release()
 
     else:
         print("ERROR: this file is not supported!")

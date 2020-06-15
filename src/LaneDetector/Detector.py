@@ -16,10 +16,17 @@ class Detector:
     -------
 
     """
-    def __init__(self):
+    def __init__(self, windowWidth=175, numWindows=11):
+        """
+        @param nWindows: (int) number of windows allowed to be stacked on top of each other
+        @param windowWidth: (int) window width (horizontal distance between diagonals)
+        """
+        self.path = "configs/"
         self.allRightParams = []
         self.allLeftParams = []
-        self.path = "configs/"
+        self.windowHeight = None
+        self.numWindows = numWindows
+        self.windowWidth = windowWidth
         self.roiPoints = Detector.loadFile(self.path+"roiPoly.sav")
         self.roiPoints = np.float32(self.roiPoints)
         self.birdPoints = Detector.trans2BirdPoint(self.roiPoints)
@@ -106,8 +113,7 @@ class Detector:
         warpedFrame = cv2.warpPerspective(bgrFrame, transMatrix, (width, height))
         return warpedFrame
 
-    @staticmethod
-    def getInitialCenters(warpedFrame):
+    def getInitialCenters(self, binaryImg):
         """
         Estimates the begining of the lane lines and locate its center points
         by computing peaks in histogram and finding the y-axis from the first
@@ -119,17 +125,21 @@ class Detector:
         initialRightXCenter: (int) X-axis position of the right lane line
         xPixsHisto: (np.ndarray) histogram of pixels of the given image along X-axis
 
-        @param warpedFrame: bird view binary image of the lane roi
+        @param binaryImg: bird view binary image of the lane roi
         """
-        xAxisHisto = np.sum(warpedFrame[warpedFrame.shape[0]//2:], axis=0)
-        midPoint = xAxisHisto.shape[0]//2    # histogram x-axis midpoint
-        leftXcPoint = np.argmax(xAxisHisto[:midPoint])
+        imgHeight = binaryImg.shape[0]
+        xAxisHisto = np.sum(binaryImg[imgHeight//2:], axis=0)
+        xMidPoint = xAxisHisto.shape[0]//2    # histogram x-axis midpoint
+        leftXcPoint = np.argmax(xAxisHisto[:xMidPoint])
         # abs id is found by adding the midpoint to start from 0 point
-        rightXcPoint = np.argmax(xAxisHisto[midPoint:]) + midPoint
-        return leftXcPoint, rightXcPoint, xAxisHisto
+        rightXcPoint = np.argmax(xAxisHisto[xMidPoint:]) + xMidPoint
+        self.windowHeight = np.int(imgHeight // self.numWindows)
+        rightCenter = (rightXcPoint, imgHeight - self.windowHeight//2)
+        leftCenter = (leftXcPoint, imgHeight - self.windowHeight//2)
 
-    @staticmethod
-    def getLanePoints(warpedFrame, nWindows, windowWidth, pixelsThresh):
+        return leftCenter, rightCenter, xAxisHisto
+
+    def getLanePoints(self, binaryImg, pixelsThresh):
         """
         Applies blind search for the lane points (white pixels on black background)
         using the sliding window algorithm starting from the centers of the histogram peaks
@@ -140,27 +150,22 @@ class Detector:
         leftLinePoints: (tuple) left lane line points  (X, Y np.ndarray)
         rightLinePoints: (tuple) right lane line points (X, Y np.ndarray)
 
-        @param warpedFrame: (np.ndarray) bird view binary image of the lane roi
-        @param nWindows: (int) number of windows allowed to be stacked on top of each other
-        @param windowWidth: (int) window width (horizontal distance between diagonals)
+        @param binaryImg: (np.ndarray) bird view binary image of the lane roi
         @param pixelsThresh: (int) minimum points to be considered as part of the lane
         """
         leftLanePixelsIds = []
         rightLanePixelsIds = []
-        noneZeroIds = warpedFrame.nonzero()
+        noneZeroIds = binaryImg.nonzero()
         noneZeroXIds = np.array(noneZeroIds[1])
         noneZeroYIds = np.array(noneZeroIds[0])
-        leftXcPoint, rightXcPoint, _ = Detector.getInitialCenters(warpedFrame)
-        windowHeight = np.int(warpedFrame.shape[0] // nWindows)
-        rightCenter = (rightXcPoint, warpedFrame.shape[0] - windowHeight//2)
-        leftCenter = (leftXcPoint, warpedFrame.shape[0] - windowHeight//2)
-        outImg = np.dstack([warpedFrame, warpedFrame, warpedFrame])
+        outImg = np.dstack([binaryImg, binaryImg, binaryImg])
+        leftCenter, rightCenter, _ = self.getInitialCenters(binaryImg)
 
-        for i in range(1, nWindows+1):
-            leftLinePt1 = (leftCenter[0]-windowWidth//2, leftCenter[1]-windowHeight//2)
-            leftLinePt2 = (leftCenter[0]+windowWidth//2, leftCenter[1]+windowHeight//2)
-            rightLinePt1 = (rightCenter[0]-windowWidth//2, rightCenter[1]-windowHeight//2)
-            rightLinePt2 = (rightCenter[0]+windowWidth//2, rightCenter[1]+windowHeight//2)
+        for i in range(1, self.numWindows+1):
+            leftLinePt1 = (leftCenter[0]-self.windowWidth//2, leftCenter[1]-self.windowHeight//2)
+            leftLinePt2 = (leftCenter[0]+self.windowWidth//2, leftCenter[1]+self.windowHeight//2)
+            rightLinePt1 = (rightCenter[0]-self.windowWidth//2, rightCenter[1]-self.windowHeight//2)
+            rightLinePt2 = (rightCenter[0]+self.windowWidth//2, rightCenter[1]+self.windowHeight//2)
             cv2.rectangle(outImg, leftLinePt1, leftLinePt2, (0, 255, 0), 3)
             cv2.rectangle(outImg, rightLinePt1, rightLinePt2, (0, 255, 0), 3)
 
@@ -174,13 +179,13 @@ class Detector:
             leftLanePixelsIds.append(leftWindowPoints)
             rightLanePixelsIds.append(rightWindowPoints)
 
-            leftCenter = leftCenter[0], leftCenter[1] - windowHeight
+            leftCenter = leftCenter[0], leftCenter[1] - self.windowHeight
             if leftWindowPoints.sum() > pixelsThresh:
                 #         xC = np.int(np.median(noneZeroXIds[leftWindowPoints]))
                 lXc = np.int(noneZeroXIds[leftWindowPoints].mean())
                 leftCenter = (lXc, leftCenter[1])
 
-            rightCenter = rightCenter[0], rightCenter[1] - windowHeight
+            rightCenter = rightCenter[0], rightCenter[1] - self.windowHeight
             if rightWindowPoints.sum() > pixelsThresh:
                 #         xC = np.int(np.median(noneZeroXIds[leftWindowPoints]))
                 rXc = np.int(noneZeroXIds[rightWindowPoints].mean())
@@ -286,19 +291,25 @@ class Detector:
         laneBoundry = list(np.vstack([leftLaneBoundry, rightLaneBoundry]).reshape(1, -1, 2))
         # t1 = time()
         cv2.fillPoly(laneMask, laneBoundry, (0, 255, 0))
-        # cv2.polylines(laneMask, [np.array(leftLine, "int32")], False, (255, 0, 0), 33)
-        # cv2.polylines(laneMask, [np.array(righLine, "int32")], False, (255, 0, 0), 33)
+        # cv2.polylines(laneMask, [np.array(leftLine, "int32")], False, (0, 255, 0), 33)
+        # cv2.polylines(laneMask, [np.array(righLine, "int32")], False, (0, 255, 0), 33)
         # t2 = time()
         # print("time >>>>>>>>>>>>>>>>>>>  ", t2 - t1)
         return laneMask
 
-    @staticmethod
-    def applyLaneMasks(srcFrame, birdPoint, roiPoints, *masks):
-        M = cv2.getPerspectiveTransform(birdPoint, np.float32(roiPoints))
+    def applyLaneMasks(self, srcFrame, *masks):
+        """
+        Applies detected lane mask over source image to be displayed
+
+        @param srcFrame: (np.3darray) source image to be displayed
+        @masks: other masks to apply over the source image 
+        """
+        M = cv2.getPerspectiveTransform(self.birdPoints, self.roiPoints)
         laneMask = masks[-1]
         # boundryMask = cv2.warpPerspective(boundryMask, M, (1280, 720), cv2.INTER_LINEAR)
-        laneMask = cv2.warpPerspective(laneMask, M, (1280, 720))
-        displayedFrame = cv2.addWeighted(srcFrame, 1, laneMask, 0.25, 0)
+        for mask in masks:
+            laneMask = cv2.warpPerspective(laneMask, M, (1280, 720))
+            displayedFrame = cv2.addWeighted(srcFrame, 1, laneMask, 0.25, 0)
         # displayedFrame = cv2.add(displayedFrame, boundryMask)
         return displayedFrame
 
@@ -311,12 +322,12 @@ class Detector:
             linesParams = np.mean(self.allLeftParams[-3::], axis=0), np.mean(self.allRightParams[-3::], axis=0)
             linesParams, leftLinePoints, rightLinePoints = Detector.predictLaneLines(birdFrame, linesParams, margin=100)
         else:
-            leftLanePoints, rightLanePoints = Detector.getLanePoints(birdFrame, 11, 175, 55, )
+            leftLanePoints, rightLanePoints = self.getLanePoints(birdFrame, 55)
             linesParams, leftLinePoints, rightLinePoints = Detector.fitLaneLines(
                 leftLanePoints, rightLanePoints, birdFrame.shape[0], order=2
             )    
         self.allLeftParams.append(linesParams[0])
         self.allRightParams.append(linesParams[1])
         laneMask = Detector.plotPredictionBoundry(birdFrame, leftLinePoints, rightLinePoints, margin=100)
-        displayedFrame = Detector.applyLaneMasks(displayedFrame, self.birdPoints, self.roiPoints, laneMask)
+        displayedFrame = self.applyLaneMasks(displayedFrame, laneMask)
         return displayedFrame
