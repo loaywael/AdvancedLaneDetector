@@ -107,50 +107,7 @@ class Detector:
         return warpedFrame
 
     @staticmethod
-    def predictLaneLines(warpedFrame, linesParams, margin):
-        """
-        Predicts lane line in a new frame based on previous detection from blind search
-
-        Returns
-        =======
-        outImg: (np.3darray) result of search plotted over
-        leftLinePoints: (tuple) lane lines points X, Y (np.ndarray)
-        rightLinePoints: (tuple) lane lines points X, Y (np.ndarray)
-
-        @param warpedFrame: (np.ndarray) bird view binary image of the lane roi
-        @param linesParams: (dict) previous fitted params
-        @param margin: (int) lane line detection boundry width
-        """
-        leftLineParams, rightLineParams = linesParams
-        noneZeroIds = warpedFrame.nonzero()
-        noneZeroXIds = np.array(noneZeroIds[1])
-        noneZeroYIds = np.array(noneZeroIds[0])
-
-        a, b, c = leftLineParams
-        leftLineLBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c - margin
-        leftLineRBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c + margin
-        a, b, c = rightLineParams
-        rightLineLBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c - margin
-        rightLineRBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c + margin
-
-        leftLineBoundryIds = (noneZeroXIds > leftLineLBoundry) & (noneZeroXIds < leftLineRBoundry)
-        rightLineBoundryIds = (noneZeroXIds > rightLineLBoundry) & (noneZeroXIds < rightLineRBoundry)
-
-        leftLineBoundryX = noneZeroXIds[leftLineBoundryIds]
-        leftLineBoundryY = noneZeroYIds[leftLineBoundryIds]
-        rightLineBoundryX = noneZeroXIds[rightLineBoundryIds]
-        rightLineBoundryY = noneZeroYIds[rightLineBoundryIds]
-
-        linesParams, leftLinePoints, rightLinePoints = Detector.fitLaneLines(
-            (leftLineBoundryX, leftLineBoundryY),
-            (rightLineBoundryX, rightLineBoundryY),
-            warpedFrame.shape[0]-1
-        )
-
-        return linesParams, leftLinePoints, rightLinePoints
-    
-    @staticmethod
-    def getinitialCenters(warpedFrame):
+    def getInitialCenters(warpedFrame):
         """
         Estimates the begining of the lane lines and locate its center points
         by computing peaks in histogram and finding the y-axis from the first
@@ -164,11 +121,12 @@ class Detector:
 
         @param warpedFrame: bird view binary image of the lane roi
         """
-        xPixsHisto = np.sum(warpedFrame[warpedFrame.shape[0]//2:], axis=0)
-        midPoint = xPixsHisto.shape[0]//2
-        leftXcPoint = np.argmax(xPixsHisto[:midPoint])
-        rightXcPoint = np.argmax(xPixsHisto[midPoint:]) + midPoint
-        return leftXcPoint, rightXcPoint, xPixsHisto
+        xAxisHisto = np.sum(warpedFrame[warpedFrame.shape[0]//2:], axis=0)
+        midPoint = xAxisHisto.shape[0]//2    # histogram x-axis midpoint
+        leftXcPoint = np.argmax(xAxisHisto[:midPoint])
+        # abs id is found by adding the midpoint to start from 0 point
+        rightXcPoint = np.argmax(xAxisHisto[midPoint:]) + midPoint
+        return leftXcPoint, rightXcPoint, xAxisHisto
 
     @staticmethod
     def getLanePoints(warpedFrame, nWindows, windowWidth, pixelsThresh):
@@ -179,8 +137,8 @@ class Detector:
         Returns
         =======
         outImg: (np.3darray) result of search plotted over
-        leftLinePoints: (tuple) lane lines points X, Y (np.ndarray)
-        rightLinePoints: (tuple) lane lines points X, Y (np.ndarray)
+        leftLinePoints: (tuple) left lane line points  (X, Y np.ndarray)
+        rightLinePoints: (tuple) right lane line points (X, Y np.ndarray)
 
         @param warpedFrame: (np.ndarray) bird view binary image of the lane roi
         @param nWindows: (int) number of windows allowed to be stacked on top of each other
@@ -192,7 +150,7 @@ class Detector:
         noneZeroIds = warpedFrame.nonzero()
         noneZeroXIds = np.array(noneZeroIds[1])
         noneZeroYIds = np.array(noneZeroIds[0])
-        leftXcPoint, rightXcPoint, xPixsHisto = Detector.getinitialCenters(warpedFrame)
+        leftXcPoint, rightXcPoint, _ = Detector.getInitialCenters(warpedFrame)
         windowHeight = np.int(warpedFrame.shape[0] // nWindows)
         rightCenter = (rightXcPoint, warpedFrame.shape[0] - windowHeight//2)
         leftCenter = (leftXcPoint, warpedFrame.shape[0] - windowHeight//2)
@@ -261,6 +219,49 @@ class Detector:
         return linesParams, (leftLineXVals, lineYVals), (rightLineXVals, lineYVals)
 
     @staticmethod
+    def predictLaneLines(warpedFrame, linesParams, margin):
+        """
+        Predicts lane line in a new frame based on previous detection from blind search
+
+        Returns
+        =======
+        outImg: (np.3darray) result of search plotted over
+        leftLinePoints: (tuple) lane lines points X, Y (np.ndarray)
+        rightLinePoints: (tuple) lane lines points X, Y (np.ndarray)
+
+        @param warpedFrame: (np.ndarray) bird view binary image of the lane roi
+        @param linesParams: (dict) previous fitted params
+        @param margin: (int) lane line detection boundry width
+        """
+        leftLineParams, rightLineParams = linesParams
+        noneZeroIds = warpedFrame.nonzero()
+        noneZeroXIds = np.array(noneZeroIds[1])
+        noneZeroYIds = np.array(noneZeroIds[0])
+
+        a, b, c = leftLineParams
+        leftLineLBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c - margin
+        leftLineRBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c + margin
+        a, b, c = rightLineParams
+        rightLineLBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c - margin
+        rightLineRBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c + margin
+
+        leftLineBoundryIds = (noneZeroXIds > leftLineLBoundry) & (noneZeroXIds < leftLineRBoundry)
+        rightLineBoundryIds = (noneZeroXIds > rightLineLBoundry) & (noneZeroXIds < rightLineRBoundry)
+
+        leftLineBoundryX = noneZeroXIds[leftLineBoundryIds]
+        leftLineBoundryY = noneZeroYIds[leftLineBoundryIds]
+        rightLineBoundryX = noneZeroXIds[rightLineBoundryIds]
+        rightLineBoundryY = noneZeroYIds[rightLineBoundryIds]
+
+        linesParams, leftLinePoints, rightLinePoints = Detector.fitLaneLines(
+            (leftLineBoundryX, leftLineBoundryY),
+            (rightLineBoundryX, rightLineBoundryY),
+            warpedFrame.shape[0]-1
+        )
+
+        return linesParams, leftLinePoints, rightLinePoints
+    
+    @staticmethod
     def plotPredictionBoundry(warpedImg, leftLinePoints, rightLinePoints, margin):
         """
         Plot the detected lane lines and lane area over a given image
@@ -285,8 +286,8 @@ class Detector:
         laneBoundry = list(np.vstack([leftLaneBoundry, rightLaneBoundry]).reshape(1, -1, 2))
         # t1 = time()
         cv2.fillPoly(laneMask, laneBoundry, (0, 255, 0))
-        # cv2.polylines(boundryMask, [np.array(leftLine, "int32")], False, (255, 255, 0), 33)
-        # cv2.polylines(boundryMask, [np.array(righLine, "int32")], False, (255, 255, 0), 33)
+        # cv2.polylines(laneMask, [np.array(leftLine, "int32")], False, (255, 0, 0), 33)
+        # cv2.polylines(laneMask, [np.array(righLine, "int32")], False, (255, 0, 0), 33)
         # t2 = time()
         # print("time >>>>>>>>>>>>>>>>>>>  ", t2 - t1)
         return laneMask
@@ -307,11 +308,9 @@ class Detector:
         binaryLanes = Detector.getLaneMask(displayedFrame, 33, 175, 110, 30, 170)
         birdFrame = self.warp2BirdPoly(binaryLanes, 1280, 720)
         if len(self.allLeftParams) > 2 and len(self.allRightParams) > 2:
-            print("up")
             linesParams = np.mean(self.allLeftParams[-3::], axis=0), np.mean(self.allRightParams[-3::], axis=0)
             linesParams, leftLinePoints, rightLinePoints = Detector.predictLaneLines(birdFrame, linesParams, margin=100)
         else:
-            print("down")
             leftLanePoints, rightLanePoints = Detector.getLanePoints(birdFrame, 11, 175, 55, )
             linesParams, leftLinePoints, rightLinePoints = Detector.fitLaneLines(
                 leftLanePoints, rightLanePoints, birdFrame.shape[0], order=2

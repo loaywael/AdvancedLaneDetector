@@ -41,7 +41,7 @@ def main(arg_vars):
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         if media_name:
-            fourcc = cv2.VideoWriter_fourcc(*"XVID")
+            fourcc = 0x7634706d#cv2.VideoWriter_fourcc(*"MP4V")
             vidWriter = cv2.VideoWriter("../assets/" + media_name, fourcc, fps, (width, height))
         while True:
             ret, frame = cap.read()
@@ -54,7 +54,8 @@ def main(arg_vars):
                 cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (15, 25),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 1, cv2.LINE_AA)
                 cv2.imshow("detection", detectedImg)
-                vidWriter.write(detectedImg)
+                if media_name:
+                    vidWriter.write(detectedImg)
                 k = cv2.waitKey(1)
                 if k & 0xFF == ord('q'):
                     break
