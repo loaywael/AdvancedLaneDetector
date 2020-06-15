@@ -48,7 +48,7 @@ Detecting curved lane and computing radius of curvature
 
     </br></br></br>   
     <h3 align=center>Project Demo</h3>
-    
+    <img align="middle" src="assets/project_video.gif" alt="lane detected in green" style="width: 100%;"/>
     <table><tr>
     <td><img src="assets/test1.png" alt="lane detected in green" style="width: 250px;"/></td>
     <td><img src="assets/test2.png" alt="lane detected in green" style="width: 250px;"/></td>
