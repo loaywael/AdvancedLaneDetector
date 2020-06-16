@@ -59,6 +59,8 @@ def main(arg_vars):
                 k = cv2.waitKey(1)
                 if k & 0xFF == ord('q'):
                     break
+            else:
+                break
         cap.release()
         if media_name:
             vidWriter.release()
@@ -66,7 +68,7 @@ def main(arg_vars):
     else:
         print("ERROR: this file is not supported!")
 
-
 if __name__ == "__main__":
     main(sys.argv[1:])
     cv2.destroyAllWindows()
+    
