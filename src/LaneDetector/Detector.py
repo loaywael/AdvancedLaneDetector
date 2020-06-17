@@ -1,5 +1,6 @@
 from decimal import Decimal
 import numpy as np
+import imutils
 import pickle
 import cv2
 import os
@@ -60,10 +61,7 @@ class Detector:
         self.birdPoints = Detector.trans2BirdPoint(self.roiPoints)
         self.roi2birdTransMtx = cv2.getPerspectiveTransform(self.roiPoints, self.birdPoints)
         self.bird2roiTransMtx = cv2.getPerspectiveTransform(self.birdPoints, self.roiPoints)
-        self.steerWheel = cv2.imread("../assets/steering_wheel.png")
-        self.steerWheel = cv2.resize(self.steerWheel, None, fx=0.25, fy=0.25)
-
-
+        self.steerWheel = Detector.initSteerWheelFG()
         self.camModel = Detector.loadFile(self.path+"camCalibMatCoeffs.sav")
         self.dstCoeffs = self.camModel["dstCoeffs"]
         self.camMtx = self.camModel["camMtx"]
@@ -102,6 +100,19 @@ class Detector:
             roiPoints[2], roiPoints[-1]
         ])
         return birdPoints
+
+    @staticmethod
+    def initSteerWheelFG():
+        """
+        """
+        steerWheel = cv2.imread("../assets/steering_wheel.png")
+        steerWheel = cv2.resize(steerWheel, None, fx=0.25, fy=0.25)
+        steerWheelMask = cv2.cvtColor(steerWheel, cv2.COLOR_BGR2GRAY)
+        steerWheelMask = cv2.medianBlur(steerWheelMask, 3)
+        steerWheelMask = cv2.morphologyEx(steerWheelMask, cv2.MORPH_DILATE, kernel=np.ones((3, 3)))
+        _, steerWheelMask = cv2.threshold(steerWheelMask, 245, 255, cv2.THRESH_BINARY_INV)
+        fgSteerWheel = cv2.bitwise_and(steerWheel, steerWheel, mask=steerWheelMask)
+        return fgSteerWheel
 
     @staticmethod
     def getLaneMask(bgrFrame, minEdge, maxEdge, satThresh, hueThresh, redThresh):
@@ -300,16 +311,20 @@ class Detector:
         # print("bird: ", self.birdPoints, "roi: ", self.roiPoints)
         # print(laneMidPoint.max())
 
-    def addSteeringWheel(self, srcImg, distance):
-        degrees = distance/180
-        direction = "right" if distance > 0 else "left"
+    def addSteeringWheel(self, srcImg):
+        angle = self.laneMidPoint - self.carHeadMidPoint    
         steerWheelHeight, steerWheelWidth = self.steerWheel.shape[:2]
         center = steerWheelWidth//2, steerWheelHeight//2
-        # cv2.imshow("strWeel", steerWheel)
-        srcImg[50:50+steerWheelHeight, 1000:1000+steerWheelWidth] = self.steerWheel
-        # cv2.imshow("src", srcImg)
-        # cv2.waitKey(0)
-        # cv2.add(srcImg, steerWheel)
+    
+        rotMtx = cv2.getRotationMatrix2D(center, angle, 1.0)
+        fgSteerWheel = cv2.warpAffine(self.steerWheel, rotMtx, (steerWheelWidth, steerWheelHeight))
+
+        roiPatch = srcImg[50:50+steerWheelHeight, 550:550+steerWheelWidth]
+        roiPatch[fgSteerWheel > 1] = 0
+
+        steerWheel = cv2.add(fgSteerWheel, roiPatch)
+        srcImg[50:50+steerWheelHeight, 550:550+steerWheelWidth] = steerWheel
+
         return srcImg
 
     @staticmethod
@@ -371,7 +386,7 @@ class Detector:
         for mask in masks:
             laneMask = cv2.warpPerspective(mask, self.bird2roiTransMtx, (1280, 720))
             displayedFrame = cv2.addWeighted(srcFrame, 1, laneMask, 0.25, 0)
-        self.plotLaneMarker(displayedFrame)
+        distance = self.plotLaneMarker(displayedFrame)
         self.addSteeringWheel(displayedFrame)
 
        
