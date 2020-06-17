@@ -298,7 +298,7 @@ class Detector:
         
         return (leftXPoints, leftYPoints), (rightXPoints, rightYPoints)
     
-    def setLaneXcPoint(self, leftLineParams, rightLineParams, Yc=700):
+    def setLaneXcPoint(self, leftLineParams, rightLineParams, Yc=670):
         """
 
         """
@@ -307,24 +307,17 @@ class Detector:
         a, b, c = rightLineParams
         rightLineXc = a*Yc**2 + b*Yc + c
         self.laneMidPoint = int(((rightLineXc - leftLineXc) // 2) + leftLineXc)
-        # laneMidPoint = cv2.warpPerspective(laneMidPoint, self.bird2roiTransMtx, (1280, 720))
-        # print("bird: ", self.birdPoints, "roi: ", self.roiPoints)
-        # print(laneMidPoint.max())
 
-    def addSteeringWheel(self, srcImg):
-        angle = self.laneMidPoint - self.carHeadMidPoint    
+    def plotSteeringWheel(self, srcImg):
+        angle = (self.laneMidPoint - self.carHeadMidPoint) // -3
         steerWheelHeight, steerWheelWidth = self.steerWheel.shape[:2]
         center = steerWheelWidth//2, steerWheelHeight//2
-    
         rotMtx = cv2.getRotationMatrix2D(center, angle, 1.0)
         fgSteerWheel = cv2.warpAffine(self.steerWheel, rotMtx, (steerWheelWidth, steerWheelHeight))
-
         roiPatch = srcImg[50:50+steerWheelHeight, 550:550+steerWheelWidth]
         roiPatch[fgSteerWheel > 1] = 0
-
         steerWheel = cv2.add(fgSteerWheel, roiPatch)
         srcImg[50:50+steerWheelHeight, 550:550+steerWheelWidth] = steerWheel
-
         return srcImg
 
     @staticmethod
@@ -351,8 +344,8 @@ class Detector:
         laneBoundry = list(np.vstack([leftLaneBoundry, rightLaneBoundry]).reshape(1, -1, 2))
         cv2.fillPoly(laneMask, laneBoundry, (0, 255, 0))
         # boundryMask = np.zeros_like(warped3DImg)
-        # cv2.polylines(laneMask, [np.array(leftLine, "int32")], False, (0, 255, 0), 33)
-        # cv2.polylines(laneMask, [np.array(righLine, "int32")], False, (0, 255, 0), 33)
+        # cv2.polylines(laneMask, [np.array(leftLine, "int32")], False, (15, 0, 15), 33)
+        # cv2.polylines(laneMask, [np.array(righLine, "int32")], False, (15, 0, 15), 33)
         return laneMask
 
     def plotLaneMarker(self, frame):
@@ -386,8 +379,8 @@ class Detector:
         for mask in masks:
             laneMask = cv2.warpPerspective(mask, self.bird2roiTransMtx, (1280, 720))
             displayedFrame = cv2.addWeighted(srcFrame, 1, laneMask, 0.25, 0)
-        distance = self.plotLaneMarker(displayedFrame)
-        self.addSteeringWheel(displayedFrame)
+        self.plotLaneMarker(displayedFrame)
+        self.plotSteeringWheel(displayedFrame)
 
        
         # displayedFrame = cv2.add(displayedFrame, boundryMask)
