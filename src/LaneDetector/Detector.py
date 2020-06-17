@@ -4,7 +4,7 @@ import pickle
 import cv2
 import os
 
-
+ 
 class Detector:
     """ 
     Sliding Window Curved Lane Detector
@@ -39,22 +39,31 @@ class Detector:
     applyLaneMasks(self, srcFrame, *masks)
     __call__(self, img)
     """
-    def __init__(self, windowWidth=175, numWindows=11, threshold=55):
+    def __init__(self, frameShape, windowWidth=175, numWindows=11, threshold=55):
         """
         @param windowWidth: (int) window width (horizontal distance between diagonals)
         @param windowWidth: (int) number of windows allowed to be stacked on top of each other
         @param threshold: (int) minimum points to be considered as part of the lane
         """
+        self.frameShape = (*frameShape[-2::-1], frameShape[-1])
+        self.windowWidth = windowWidth
+        self.numWindows = numWindows
+        self.windowHeight = np.int(self.frameShape[0] // numWindows)
+        self.threshold = threshold
         self.path = "configs/"
         self.allRightParams = []
         self.allLeftParams = []
-        self.windowHeight = None
-        self.threshold = threshold
-        self.numWindows = numWindows
-        self.windowWidth = windowWidth
+        self.laneMidPoint = None
+        self.carHeadMidPoint = self.frameShape[1] // 2
         self.roiPoints = Detector.loadFile(self.path+"roiPoly.sav")
         self.roiPoints = np.float32(self.roiPoints)
         self.birdPoints = Detector.trans2BirdPoint(self.roiPoints)
+        self.roi2birdTransMtx = cv2.getPerspectiveTransform(self.roiPoints, self.birdPoints)
+        self.bird2roiTransMtx = cv2.getPerspectiveTransform(self.birdPoints, self.roiPoints)
+        self.steerWheel = cv2.imread("../assets/steering_wheel.png")
+        self.steerWheel = cv2.resize(self.steerWheel, None, fx=0.25, fy=0.25)
+
+
         self.camModel = Detector.loadFile(self.path+"camCalibMatCoeffs.sav")
         self.dstCoeffs = self.camModel["dstCoeffs"]
         self.camMtx = self.camModel["camMtx"]
@@ -124,22 +133,6 @@ class Detector:
         outMask = cv2.bitwise_or(colorMask, edgesMask)
         return outMask
 
-    def warp2BirdPoly(self, bgrFrame, width, height):
-        """
-        Warps a given image to a prespective bird view (top-plane)
-
-        @param bgrFrame: (np.ndarray) BGR image
-        @param width: width of the target warped image
-        @param height: height of the target warped image
-
-        Returns
-        =======
-        birdFrame : (np.2darray) bird view frame
-        """
-        transMatrix = cv2.getPerspectiveTransform(self.roiPoints, self.birdPoints)
-        birdFrame = cv2.warpPerspective(bgrFrame, transMatrix, (width, height))
-        return birdFrame
-
     def getInitialCenters(self, binaryImg):
         """
         Estimates the begining of the lane lines and locate its center points
@@ -155,16 +148,13 @@ class Detector:
         xAxisHisto: (np.ndarray) histogram of pixels of the given image along X-axis
 
         """
-        imgHeight = binaryImg.shape[0]
-        xAxisHisto = np.sum(binaryImg[imgHeight//2:], axis=0)
+        xAxisHisto = np.sum(binaryImg[self.frameShape[0]//2:], axis=0)
         xMidPoint = xAxisHisto.shape[0]//2    # histogram x-axis midpoint
         leftXcPoint = np.argmax(xAxisHisto[:xMidPoint])
         # abs id is found by adding the midpoint to start from 0 point
         rightXcPoint = np.argmax(xAxisHisto[xMidPoint:]) + xMidPoint
-        self.windowHeight = np.int(imgHeight // self.numWindows)
-        rightCenter = (rightXcPoint, imgHeight - self.windowHeight//2)
-        leftCenter = (leftXcPoint, imgHeight - self.windowHeight//2)
-
+        rightCenter = (rightXcPoint, self.frameShape[0] - self.windowHeight//2)
+        leftCenter = (leftXcPoint, self.frameShape[0] - self.windowHeight//2)
         return leftCenter, rightCenter, xAxisHisto
 
     def getLanePoints(self, binaryImg):
@@ -297,6 +287,31 @@ class Detector:
         
         return (leftXPoints, leftYPoints), (rightXPoints, rightYPoints)
     
+    def setLaneXcPoint(self, leftLineParams, rightLineParams, Yc=700):
+        """
+
+        """
+        a, b, c = leftLineParams
+        leftLineXc = a*Yc**2 + b*Yc + c
+        a, b, c = rightLineParams
+        rightLineXc = a*Yc**2 + b*Yc + c
+        self.laneMidPoint = int(((rightLineXc - leftLineXc) // 2) + leftLineXc)
+        # laneMidPoint = cv2.warpPerspective(laneMidPoint, self.bird2roiTransMtx, (1280, 720))
+        # print("bird: ", self.birdPoints, "roi: ", self.roiPoints)
+        # print(laneMidPoint.max())
+
+    def addSteeringWheel(self, srcImg, distance):
+        degrees = distance/180
+        direction = "right" if distance > 0 else "left"
+        steerWheelHeight, steerWheelWidth = self.steerWheel.shape[:2]
+        center = steerWheelWidth//2, steerWheelHeight//2
+        # cv2.imshow("strWeel", steerWheel)
+        srcImg[50:50+steerWheelHeight, 1000:1000+steerWheelWidth] = self.steerWheel
+        # cv2.imshow("src", srcImg)
+        # cv2.waitKey(0)
+        # cv2.add(srcImg, steerWheel)
+        return srcImg
+
     @staticmethod
     def plotPredictionBoundry(warpedImg, leftLinePoints, rightLinePoints, margin):
         """
@@ -313,7 +328,6 @@ class Detector:
         laneMask: (np.3darray) lane highlighted area
         """
         warped3DImg = np.dstack([warpedImg, warpedImg, warpedImg])
-        # boundryMask = np.zeros_like(warped3DImg)
         laneMask = np.zeros_like(warped3DImg)
         leftLine = list(zip(*leftLinePoints))
         righLine = list(zip(*rightLinePoints))
@@ -321,9 +335,25 @@ class Detector:
         rightLaneBoundry = np.flipud(np.array(righLine, "int"))
         laneBoundry = list(np.vstack([leftLaneBoundry, rightLaneBoundry]).reshape(1, -1, 2))
         cv2.fillPoly(laneMask, laneBoundry, (0, 255, 0))
+        # boundryMask = np.zeros_like(warped3DImg)
         # cv2.polylines(laneMask, [np.array(leftLine, "int32")], False, (0, 255, 0), 33)
         # cv2.polylines(laneMask, [np.array(righLine, "int32")], False, (0, 255, 0), 33)
         return laneMask
+
+    def plotLaneMarker(self, frame):
+        carCenterPt1 = self.carHeadMidPoint, 670
+        carCenterPt2 = self.carHeadMidPoint, 670 - 100
+        laneCenterPt1 = self.laneMidPoint, 670
+        laneCenterPt2 = self.laneMidPoint, 670 - 50
+        leftCenterMarkerPt1 = (laneCenterPt1[0]-180, laneCenterPt1[1])
+        leftCenterMarkerPt2 = (laneCenterPt2[0]-180, laneCenterPt2[1])
+        rightCenterMarkerPt1 = (laneCenterPt1[0]+180, laneCenterPt1[1])
+        rightCenterMarkerPt2 = (laneCenterPt2[0]+180, laneCenterPt2[1])
+
+        cv2.line(frame, carCenterPt1, carCenterPt2, (255, 0, 0), 5)
+        cv2.line(frame, laneCenterPt1, laneCenterPt2, (0, 255, 0), 5)
+        cv2.line(frame, leftCenterMarkerPt1, leftCenterMarkerPt2, (0, 0, 255), 3)
+        cv2.line(frame, rightCenterMarkerPt1, rightCenterMarkerPt2, (0, 0, 255), 3)
 
     def applyLaneMasks(self, srcFrame, *masks):
         """
@@ -336,13 +366,17 @@ class Detector:
         =======
         displayedFrame: (np.3darray) detected frame to be displayed
         """
-        Mtx = cv2.getPerspectiveTransform(self.birdPoints, self.roiPoints)
-        laneMask = masks[-1]
+        # laneMask = masks[-1]
         # boundryMask = cv2.warpPerspective(boundryMask, M, (1280, 720), cv2.INTER_LINEAR)
         for mask in masks:
-            laneMask = cv2.warpPerspective(laneMask, Mtx, (1280, 720))
+            laneMask = cv2.warpPerspective(mask, self.bird2roiTransMtx, (1280, 720))
             displayedFrame = cv2.addWeighted(srcFrame, 1, laneMask, 0.25, 0)
+        self.plotLaneMarker(displayedFrame)
+        self.addSteeringWheel(displayedFrame)
+
+       
         # displayedFrame = cv2.add(displayedFrame, boundryMask)
+
         return displayedFrame
 
     def __call__(self, bgrImg):
@@ -358,7 +392,8 @@ class Detector:
         undist_frame = cv2.undistort(bgrImg, self.camMtx, self.dstCoeffs, None, self.camMtx)
         displayedFrame = undist_frame.copy()
         binaryLanes = Detector.getLaneMask(displayedFrame, 33, 175, 110, 30, 170)
-        birdFrame = self.warp2BirdPoly(binaryLanes, 1280, 720)
+        birdFrame = cv2.warpPerspective(binaryLanes, self.roi2birdTransMtx, (1280, 720))
+
 
         if len(self.allLeftParams) > 2 and len(self.allRightParams) > 2:
             leftLinePoints, rightLinePoints = self.predictLaneLines(birdFrame, margin=100)
@@ -369,7 +404,8 @@ class Detector:
         leftLineParams, rightLineParams = Detector.fitLaneLines(leftLinePoints, rightLinePoints, order=2)    
         leftLinePoints = Detector.genLinePoints(leftLineParams, lane_max_height)
         rightLinePoints = Detector.genLinePoints(rightLineParams, lane_max_height)
-
+        self.setLaneXcPoint(leftLineParams, rightLineParams, 670)
+        # print(self.carHeadMidPoint, self.laneMidPoint)
         laneMask = Detector.plotPredictionBoundry(birdFrame, leftLinePoints, rightLinePoints, margin=100)
         displayedFrame = self.applyLaneMasks(displayedFrame, laneMask)
         self.allLeftParams.append(leftLineParams)

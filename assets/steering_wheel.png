@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xbel version="1.0"
+      xmlns:bookmark="http://www.freedesktop.org/standards/desktop-bookmarks"
+      xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info"
+>
+  <bookmark href="file:///home/loay/Downloads/Mojave-dark-alt-20200519113010.tar.xz" added="2020-06-05T22:52:55Z" modified="2020-06-05T22:54:11Z" visited="2020-06-06T00:51:03Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-xz-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2020-06-05T22:52:55Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2020-06-05T22:54:11Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Downloads/Mojave-dark-20200519113011.tar.xz" added="2020-06-05T22:52:59Z" modified="2020-06-05T22:54:01Z" visited="2020-06-06T00:51:03Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-xz-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2020-06-05T22:52:59Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2020-06-05T22:54:01Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Downloads/Mojave-light.tar.xz" added="2020-06-05T22:53:29Z" modified="2020-06-05T22:53:48Z" visited="2020-06-06T00:51:03Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-xz-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2020-06-05T22:53:29Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2020-06-05T22:53:48Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Downloads/Mcata-dark.tar.xz" added="2020-06-05T23:00:39Z" modified="2020-06-05T23:00:39Z" visited="2020-06-06T00:51:03Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-xz-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2020-06-05T23:00:39Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Downloads/Os-Catalina-Gtk-night.tar.xz" added="2020-06-05T23:02:08Z" modified="2020-06-05T23:02:10Z" visited="2020-06-06T00:51:03Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-xz-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="Firefox" exec="&apos;firefox %u&apos;" modified="2020-06-05T23:02:08Z" count="1"/>
+          <bookmark:application name="File Roller" exec="&apos;file-roller&apos;" modified="2020-06-05T23:02:10Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/tests/any1" added="2020-06-06T00:51:03Z" modified="2020-06-12T15:15:20Z" visited="2020-06-06T00:51:03Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="code" exec="&apos;code %u&apos;" modified="2020-06-12T15:15:20Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/VehicleDetector/requirements.txt" added="2020-06-06T02:11:00Z" modified="2020-06-06T14:28:28Z" visited="2020-06-06T14:35:58Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2020-06-06T14:28:26Z" count="5"/>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2020-06-06T14:28:28Z" count="21"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/VehicleDetector" added="2020-06-06T14:35:57Z" modified="2020-06-12T00:56:08Z" visited="2020-06-06T14:35:58Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="code" exec="&apos;code %u&apos;" modified="2020-06-12T00:56:08Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Pictures/personal/APEX_EVER_iHub.jpeg" added="2020-06-06T15:02:13Z" modified="2020-06-06T15:08:13Z" visited="2020-06-06T21:43:56Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:groups>
+          <bookmark:group>Graphics</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-06T15:02:13Z" count="1"/>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;gimp-2.10 %U&apos;" modified="2020-06-06T15:07:56Z" count="2"/>
+          <bookmark:application name="GNU Image Manipulation Program" exec="&apos;gimp-2.10 %u&apos;" modified="2020-06-06T15:08:13Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-osman.e07%20%5B720p%5D.mkv" added="2020-06-06T15:25:47Z" modified="2020-06-06T15:57:57Z" visited="2020-06-06T21:43:56Z">
+    <title>[CimaClub.Com]-osman.e07 [720p].mkv</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/x-matroska"/>
+        <bookmark:groups>
+          <bookmark:group>Totem</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-06T15:25:47Z" count="1"/>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2020-06-06T15:57:55Z" count="1"/>
+          <bookmark:application name="Videos" exec="&apos;totem %u&apos;" modified="2020-06-06T15:57:57Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///run/media/loay/Store/%5BCimaClub.Com%5D-osman.e07%20%5B720p%5D.mkv" added="2020-06-06T16:01:40Z" modified="2020-06-06T16:01:41Z" visited="2020-06-06T21:43:56Z">
+    <title>[CimaClub.Com]-osman.e07 [720p].mkv</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/x-matroska"/>
+        <bookmark:groups>
+          <bookmark:group>Totem</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2020-06-06T16:01:40Z" count="1"/>
+          <bookmark:application name="Videos" exec="&apos;totem %u&apos;" modified="2020-06-06T16:01:41Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/cv-venv/bin/python3.8" added="2020-06-06T21:43:56Z" modified="2020-06-16T17:34:04Z" visited="2020-06-06T21:43:56Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/octet-stream"/>
+        <bookmark:applications>
+          <bookmark:application name="code" exec="&apos;code %u&apos;" modified="2020-06-16T17:34:04Z" count="3"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-osman.08%20%5B720p%5D.mkv" added="2020-06-07T12:20:13Z" modified="2020-06-07T12:20:13Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/x-matroska"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-07T12:20:13Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/hogify.py" added="2020-06-08T00:00:27Z" modified="2020-06-08T00:27:26Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/x-python"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2020-06-08T00:27:26Z" count="30"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-KURULUSOSMANEP09%20%5B720p%5D.mkv" added="2020-06-08T12:28:43Z" modified="2020-06-08T12:28:43Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/x-matroska"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-08T12:28:43Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///run/media/loay/Store/%5BCimaClub.Com%5D-KURULUSOSMANEP09%20%5B720p%5D.mkv" added="2020-06-08T12:52:56Z" modified="2020-06-08T12:52:58Z" visited="2020-06-11T22:10:39Z">
+    <title>[CimaClub.Com]-KURULUSOSMANEP09 [720p].mkv</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/x-matroska"/>
+        <bookmark:groups>
+          <bookmark:group>Totem</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2020-06-08T12:52:56Z" count="1"/>
+          <bookmark:application name="Videos" exec="&apos;totem %u&apos;" modified="2020-06-08T12:52:58Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-osman.e10%20%5B720p%5D.mkv" added="2020-06-09T12:58:18Z" modified="2020-06-09T12:58:18Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/x-matroska"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-09T12:58:18Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/Live_Wallpapers/matrix.mp4" added="2020-06-10T03:26:09Z" modified="2020-06-10T03:30:44Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-10T03:26:09Z" count="1"/>
+          <bookmark:application name="komorebi-wallpaper-creator" exec="&apos;komorebi-wallpaper-creator %u&apos;" modified="2020-06-10T03:30:44Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/Live_Wallpapers/y2mate.com%20-%20Matrix%20Digital%20Rain%20Background%20-%20Free%20Technology%20motion%20background_pl6JB7INYQw_1080p.mp4" added="2020-06-10T03:27:49Z" modified="2020-06-10T03:38:50Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-10T03:27:49Z" count="1"/>
+          <bookmark:application name="komorebi-wallpaper-creator" exec="&apos;komorebi-wallpaper-creator %u&apos;" modified="2020-06-10T03:38:50Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///usr/share/Komorebi/matrix1/matrix.mp4" added="2020-06-10T03:36:09Z" modified="2020-06-10T03:36:10Z" visited="2020-06-11T22:10:39Z">
+    <title>matrix.mp4</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:groups>
+          <bookmark:group>Totem</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2020-06-10T03:36:09Z" count="1"/>
+          <bookmark:application name="Videos" exec="&apos;totem %u&apos;" modified="2020-06-10T03:36:10Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/Live_Wallpapers/matrix2.mp4" added="2020-06-10T03:51:36Z" modified="2020-06-10T04:03:50Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:applications>
+          <bookmark:application name="komorebi-wallpaper-creator" exec="&apos;komorebi-wallpaper-creator %u&apos;" modified="2020-06-10T04:03:50Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-Almosisi%20Osman.s01.Ep11.720p.mp4" added="2020-06-10T12:18:00Z" modified="2020-06-11T12:43:03Z" visited="2020-06-11T22:10:39Z">
+    <title>[CimaClub.Com]-Almosisi Osman.s01.Ep11.720p.mp4</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:groups>
+          <bookmark:group>Totem</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-10T12:18:00Z" count="1"/>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2020-06-11T12:42:57Z" count="1"/>
+          <bookmark:application name="Videos" exec="&apos;totem %u&apos;" modified="2020-06-11T12:43:03Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-osman.e12.mp4" added="2020-06-11T01:23:00Z" modified="2020-06-11T01:23:00Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-11T01:23:00Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-osman.25_SamaUp.mp4" added="2020-06-11T01:25:12Z" modified="2020-06-11T01:25:12Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-11T01:25:12Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-osman.25.mp4" added="2020-06-11T03:03:27Z" modified="2020-06-11T13:40:13Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-11T03:03:27Z" count="1"/>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;/usr/bin/vlc --started-from-file %U&apos;" modified="2020-06-11T13:40:13Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Pictures/Screenshot%20from%202020-06-11%2016-40-03.png" added="2020-06-11T14:40:07Z" modified="2020-06-11T14:40:07Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="gsd-media-keys" exec="&apos;gsd-media-keys %u&apos;" modified="2020-06-11T14:40:07Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Pictures/%D9%82%D8%B1%D8%A7%D8%A1%D8%A9%20%D8%A7%D9%84%D8%BA%D8%A7%D8%B2" added="2020-06-11T14:41:44Z" modified="2020-06-11T14:41:44Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="Screenshot" exec="&apos;gnome-screenshot %u&apos;" modified="2020-06-11T14:41:44Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Pictures/%D9%82%D8%B1%D8%A7%D8%A1%D8%A9%20%D8%A7%D9%84%D8%BA%D8%A7%D8%B2/11979%2010-6-2020" added="2020-06-11T14:43:02Z" modified="2020-06-11T14:43:02Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:groups>
+          <bookmark:group>Graphics</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="GNOME Screenshot" exec="&apos;gimp-2.10 %u&apos;" modified="2020-06-11T14:43:02Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/VehicleDetector/data/detection_data/test_data/test2.jpg" added="2020-06-11T21:49:59Z" modified="2020-06-11T21:49:59Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-11T21:49:59Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/VehicleDetector/data/detection_data/test_data/test1.jpg" added="2020-06-11T21:50:57Z" modified="2020-06-12T00:57:29Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-11T21:50:57Z" count="1"/>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;gthumb %U&apos;" modified="2020-06-12T00:57:29Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/VehicleDetector/data/detection_data/test_data/test4.jpg" added="2020-06-11T21:51:48Z" modified="2020-06-11T21:51:48Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-11T21:51:48Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/VehicleDetector/data/detection_data/test_data/test5.jpg" added="2020-06-11T21:52:17Z" modified="2020-06-11T21:52:17Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-11T21:52:17Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/VehicleDetector/data/detection_data/test_data/test6.jpg" added="2020-06-11T21:52:47Z" modified="2020-06-11T21:52:47Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/jpeg"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-11T21:52:47Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/advanced_lane_detector/xyGrads.png" added="2020-06-11T22:07:57Z" modified="2020-06-11T22:08:05Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;gthumb %U&apos;" modified="2020-06-11T22:08:05Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/AdvancedLaneDetector" added="2020-06-11T22:10:39Z" modified="2020-06-13T22:26:09Z" visited="2020-06-11T22:10:39Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="code" exec="&apos;code %u&apos;" modified="2020-06-13T22:26:09Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-Osman.e13.mp4" added="2020-06-12T01:27:56Z" modified="2020-06-12T01:27:56Z" visited="2020-06-12T15:15:21Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-12T01:27:56Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/VehicleDetector/any.html" added="2020-06-13T01:10:33Z" modified="2020-06-13T01:19:33Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/html"/>
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2020-06-13T01:19:33Z" count="3"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/VehicleDetector/project_tree.html" added="2020-06-13T01:10:43Z" modified="2020-06-13T01:10:43Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/html"/>
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2020-06-13T01:10:43Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/VehicleDetector/assets/project_tree.html" added="2020-06-13T01:55:25Z" modified="2020-06-13T01:55:25Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/html"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-13T01:55:25Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Downloads/project_tree.md" added="2020-06-13T01:55:49Z" modified="2020-06-13T02:06:46Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/markdown"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-13T02:06:46Z" count="2"/>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2020-06-13T01:55:54Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/project_tree.html/project_tree.html" added="2020-06-13T02:05:39Z" modified="2020-06-13T02:05:52Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/plain"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2020-06-13T02:05:52Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/asset/project_tree.html" added="2020-06-13T02:06:14Z" modified="2020-06-13T02:18:35Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/html"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-13T02:06:14Z" count="1"/>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2020-06-13T02:18:27Z" count="2"/>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;brave %U&apos;" modified="2020-06-13T02:18:35Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-osman.e14.mp4" added="2020-06-13T04:14:28Z" modified="2020-06-13T04:14:28Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-13T04:14:28Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/%D9%85%D8%A7%D8%AC%D8%AF%20%D8%B9%D8%A8%D8%AF%D8%A7%D9%84%D9%84%D9%87/%D8%B1%D8%AD%D9%84%D8%AA%D9%8A%20%D9%85%D8%B9%20%23%D8%A7%D9%84%D9%85%D8%A7%D8%B3%D9%88%D9%86%D9%8A%D9%87%20.%20%D8%AA%D8%B9%D8%B1%D9%81%D8%AA%20%D8%B9%D9%84%D9%8A%23%D8%A7%D9%84%D9%85%D8%AD%D8%A7%D9%81%D9%84_%D8%A7%D9%84%D9%85%D8%A7%D8%B3%D9%88%D9%86%D9%8A%D9%87%202015%20%D8%A7%D8%B3%D9%85%D8%AD%D9%88%D8%A7%20%D9%84%D9%8A%20%D8%A7%D8%B9%D8%B1%D8%B6%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%20%D9%85%D8%A7%D8%B9%D8%B1%D9%81%D8%AA%D9%87%20%D8%A7%D9%84%D8%AD%D9%84%D9%82%D8%A9%20%D8%B1%D9%82%D9%85%20(001).mp4" added="2020-06-13T04:48:32Z" modified="2020-06-13T04:48:32Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-13T04:48:32Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/%D9%85%D8%A7%D8%AC%D8%AF%20%D8%B9%D8%A8%D8%AF%D8%A7%D9%84%D9%84%D9%87/SurveillanceStation-6281.tgz" added="2020-06-13T12:59:42Z" modified="2020-06-13T12:59:42Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-13T12:59:42Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Downloads/synogpl-5004-armada375.tbz" added="2020-06-13T13:01:05Z" modified="2020-06-13T13:01:05Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-bzip-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-13T13:01:05Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Downloads/gcc464_glibc217_alpine-GPL.tgz" added="2020-06-13T13:01:42Z" modified="2020-06-13T13:01:42Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/x-compressed-tar"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-13T13:01:42Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Pictures/Screenshot%20from%202020-06-13%2022-41-40.png" added="2020-06-13T20:41:40Z" modified="2020-06-13T20:41:40Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="gsd-media-keys" exec="&apos;gsd-media-keys %u&apos;" modified="2020-06-13T20:41:40Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/AdvancedLaneDetector/histo.png" added="2020-06-13T22:12:28Z" modified="2020-06-13T22:12:28Z" visited="2020-06-13T22:26:10Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/png"/>
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2020-06-13T22:12:28Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/AdvancedLaneDetector/src/LaneDetector/color_edge_thresh.py" added="2020-06-13T22:28:34Z" modified="2020-06-13T22:31:48Z" visited="2020-06-14T16:33:51Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/x-python"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2020-06-13T22:28:34Z" count="1"/>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2020-06-13T22:31:48Z" count="2"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/AdvancedLaneDetector/src/LaneDetector/detection_utils.py" added="2020-06-13T22:29:38Z" modified="2020-06-13T22:29:38Z" visited="2020-06-14T16:33:51Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/x-python"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2020-06-13T22:29:38Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/AdvancedLaneDetector/src/LaneDetector/locateROI.py" added="2020-06-13T22:30:24Z" modified="2020-06-13T22:30:24Z" visited="2020-06-14T16:33:51Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/x-python"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2020-06-13T22:30:24Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/AdvancedLaneDetector/src/LaneDetector/predPlots.py" added="2020-06-13T22:32:04Z" modified="2020-06-13T22:32:04Z" visited="2020-06-14T16:33:51Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/x-python"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2020-06-13T22:32:04Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/AdvancedLaneDetector/src/LaneDetector/setVideoStream.py" added="2020-06-13T22:32:29Z" modified="2020-06-13T22:33:48Z" visited="2020-06-14T16:33:51Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/x-python"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2020-06-13T22:33:48Z" count="3"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Downloads/jolaleye.horizon-theme-vscode-2.0.2.vsix" added="2020-06-14T16:33:19Z" modified="2020-06-14T16:34:10Z" visited="2020-06-14T16:33:51Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/octet-stream"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-14T16:33:19Z" count="1"/>
+          <bookmark:application name="code" exec="&apos;code %u&apos;" modified="2020-06-14T16:34:10Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Downloads/azemoh.one-monokai-0.4.6.vsix" added="2020-06-14T16:33:33Z" modified="2020-06-14T16:34:01Z" visited="2020-06-14T16:33:51Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/octet-stream"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-14T16:33:33Z" count="1"/>
+          <bookmark:application name="code" exec="&apos;code %u&apos;" modified="2020-06-14T16:34:01Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Downloads/akamud.vscode-theme-onedark-2.2.1.vsix" added="2020-06-14T16:33:40Z" modified="2020-06-14T16:33:51Z" visited="2020-06-14T16:33:51Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="application/octet-stream"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-14T16:33:40Z" count="1"/>
+          <bookmark:application name="code" exec="&apos;code %u&apos;" modified="2020-06-14T16:33:51Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/any.html" added="2020-06-14T21:04:07Z" modified="2020-06-15T02:55:39Z" visited="2020-06-14T22:09:58Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/html"/>
+        <bookmark:groups>
+          <bookmark:group>gedit</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;brave %U&apos;" modified="2020-06-15T02:36:38Z" count="7"/>
+          <bookmark:application name="gedit" exec="&apos;gedit %u&apos;" modified="2020-06-15T02:55:39Z" count="105"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/AdvancedLaneDetector/assets/output_video.mp4" added="2020-06-14T22:16:01Z" modified="2020-06-15T20:50:29Z" visited="2020-06-16T17:31:59Z">
+    <title>output_video.mp4</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:groups>
+          <bookmark:group>Totem</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;org.gnome.Nautilus %u&apos;" modified="2020-06-15T20:50:27Z" count="7"/>
+          <bookmark:application name="Videos" exec="&apos;totem %u&apos;" modified="2020-06-15T20:50:29Z" count="3"/>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-15T05:02:14Z" count="4"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/AdvancedLaneDetector/README.md" added="2020-06-15T02:01:39Z" modified="2020-06-15T02:01:39Z" visited="2020-06-16T17:31:59Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/markdown"/>
+        <bookmark:applications>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;brave %U&apos;" modified="2020-06-15T02:01:39Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-osman.16%20%5B720p%5D.mkv" added="2020-06-15T04:57:20Z" modified="2020-06-15T04:57:20Z" visited="2020-06-16T17:31:59Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/x-matroska"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-15T04:57:20Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/AdvancedLaneDetector/assets/output_video.gif" added="2020-06-15T06:10:29Z" modified="2020-06-15T06:10:29Z" visited="2020-06-16T17:31:59Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/gif"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-15T06:10:29Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/AdvancedLaneDetector/assets/output_video%20.gif" added="2020-06-15T17:27:18Z" modified="2020-06-15T17:27:37Z" visited="2020-06-16T17:31:59Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/gif"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-15T17:27:18Z" count="1"/>
+          <bookmark:application name="org.gnome.Nautilus" exec="&apos;gthumb %U&apos;" modified="2020-06-15T17:27:37Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/ComputerVision/ObjectDetection/AdvancedLaneDetector/assets/project_video.gif" added="2020-06-15T18:03:32Z" modified="2020-06-15T18:03:32Z" visited="2020-06-16T17:31:59Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="image/gif"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-15T18:03:32Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-osman.e17.mp4" added="2020-06-16T04:42:48Z" modified="2020-06-17T01:47:08Z" visited="2020-06-16T17:31:59Z">
+    <title>[CimaClub.Com]-osman.e17.mp4</title>
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/mp4"/>
+        <bookmark:groups>
+          <bookmark:group>Totem</bookmark:group>
+        </bookmark:groups>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-16T04:42:48Z" count="1"/>
+          <bookmark:application name="Videos" exec="&apos;totem %u&apos;" modified="2020-06-17T01:47:08Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/any.py" added="2020-06-16T17:31:59Z" modified="2020-06-16T17:31:59Z" visited="2020-06-16T17:31:59Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="text/x-python"/>
+        <bookmark:applications>
+          <bookmark:application name="code" exec="&apos;code %u&apos;" modified="2020-06-16T17:31:59Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/tutorials/concurrancy/threading" added="2020-06-17T03:41:59Z" modified="2020-06-17T03:41:59Z" visited="2020-06-17T03:42:00Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="code" exec="&apos;code %u&apos;" modified="2020-06-17T03:41:59Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/code_dev_branch/tutorials/concurrancy" added="2020-06-17T03:42:18Z" modified="2020-06-17T03:42:18Z" visited="2020-06-17T03:42:19Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="inode/directory"/>
+        <bookmark:applications>
+          <bookmark:application name="code" exec="&apos;code %u&apos;" modified="2020-06-17T03:42:18Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+  <bookmark href="file:///home/loay/Videos/kurulus%20osman%20s1%20/%5BCimaClub.Com%5D-osman.18%20%5B720p%5D.mkv" added="2020-06-17T04:23:26Z" modified="2020-06-17T04:23:26Z" visited="1969-12-31T23:59:59Z">
+    <info>
+      <metadata owner="http://freedesktop.org">
+        <mime:mime-type type="video/x-matroska"/>
+        <bookmark:applications>
+          <bookmark:application name="brave" exec="&apos;brave %u&apos;" modified="2020-06-17T04:23:26Z" count="1"/>
+        </bookmark:applications>
+      </metadata>
+    </info>
+  </bookmark>
+</xbel>

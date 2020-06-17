@@ -48,49 +48,49 @@ def plotPredictionTesting(warpedImg, leftLinePoints, rightLinePoints, margin):
 
     # @timeIt
 
-    def predictLaneLinesTest(warpedFrame, linesParams, margin):
-        """
-        Predicts lane line in a new frame based on previous detection from blind search
+def predictLaneLinesTest(warpedFrame, linesParams, margin):
+    """
+    Predicts lane line in a new frame based on previous detection from blind search
 
-        Returns
-        =======
-        outImg: (np.3darray) result of search plotted over
-        leftLinePoints: (tuple) lane lines points X, Y (np.ndarray)
-        rightLinePoints: (tuple) lane lines points X, Y (np.ndarray)
+    Returns
+    =======
+    outImg: (np.3darray) result of search plotted over
+    leftLinePoints: (tuple) lane lines points X, Y (np.ndarray)
+    rightLinePoints: (tuple) lane lines points X, Y (np.ndarray)
 
-        @param warpedFrame: (np.ndarray) bird view binary image of the lane roi
-        @param linesParams: (dict) previous fitted params
-        @param margin: (int) lane line detection boundry width
-        """
-        leftLineParams, rightLineParams = linesParams
-        noneZeroIds = warpedFrame.nonzero()
-        noneZeroXIds = np.array(noneZeroIds[1])
-        noneZeroYIds = np.array(noneZeroIds[0])
+    @param warpedFrame: (np.ndarray) bird view binary image of the lane roi
+    @param linesParams: (dict) previous fitted params
+    @param margin: (int) lane line detection boundry width
+    """
+    leftLineParams, rightLineParams = linesParams
+    noneZeroIds = warpedFrame.nonzero()
+    noneZeroXIds = np.array(noneZeroIds[1])
+    noneZeroYIds = np.array(noneZeroIds[0])
 
-        a, b, c = leftLineParams
-        leftLineLBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c - margin
-        leftLineRBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c + margin
-        a, b, c = rightLineParams
-        rightLineLBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c - margin
-        rightLineRBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c + margin
+    a, b, c = leftLineParams
+    leftLineLBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c - margin
+    leftLineRBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c + margin
+    a, b, c = rightLineParams
+    rightLineLBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c - margin
+    rightLineRBoundry = a*noneZeroYIds**2 + b*noneZeroYIds + c + margin
 
-        leftLineBoundryIds = (noneZeroXIds > leftLineLBoundry) & (noneZeroXIds < leftLineRBoundry)
-        rightLineBoundryIds = (noneZeroXIds > rightLineLBoundry) & (
-            noneZeroXIds < rightLineRBoundry)
+    leftLineBoundryIds = (noneZeroXIds > leftLineLBoundry) & (noneZeroXIds < leftLineRBoundry)
+    rightLineBoundryIds = (noneZeroXIds > rightLineLBoundry) & (
+        noneZeroXIds < rightLineRBoundry)
 
-        leftLineBoundryX = noneZeroXIds[leftLineBoundryIds]
-        leftLineBoundryY = noneZeroYIds[leftLineBoundryIds]
-        rightLineBoundryX = noneZeroXIds[rightLineBoundryIds]
-        rightLineBoundryY = noneZeroYIds[rightLineBoundryIds]
-        outImg = np.dstack([warpedFrame, warpedFrame, warpedFrame])
-        outImg[leftLineBoundryY, leftLineBoundryX] = [255, 0, 0]
-        outImg[rightLineBoundryY, rightLineBoundryX] = [0, 0, 255]
-        linesParams, leftLinePoints, rightLinePoints = fitLaneLines(
-            (leftLineBoundryX, leftLineBoundryY),
-            (rightLineBoundryX, rightLineBoundryY),
-            warpedFrame.shape[0]-1
-        )
-        return outImg, linesParams, leftLinePoints, rightLinePoints
+    leftLineBoundryX = noneZeroXIds[leftLineBoundryIds]
+    leftLineBoundryY = noneZeroYIds[leftLineBoundryIds]
+    rightLineBoundryX = noneZeroXIds[rightLineBoundryIds]
+    rightLineBoundryY = noneZeroYIds[rightLineBoundryIds]
+    outImg = np.dstack([warpedFrame, warpedFrame, warpedFrame])
+    outImg[leftLineBoundryY, leftLineBoundryX] = [255, 0, 0]
+    outImg[rightLineBoundryY, rightLineBoundryX] = [0, 0, 255]
+    linesParams, leftLinePoints, rightLinePoints = fitLaneLines(
+        (leftLineBoundryX, leftLineBoundryY),
+        (rightLineBoundryX, rightLineBoundryY),
+        warpedFrame.shape[0]-1
+    )
+    return outImg, linesParams, leftLinePoints, rightLinePoints
 
 
 def getLanePointsTests(warpedFrame, nWindows, windowWidth, pixelsThresh):
@@ -214,17 +214,6 @@ def measureCurveRadius(y, params):
     return r
 
 
-@timeIt
-def applyLaneMasks(srcFrame, birdPoint, roiPoints, *masks):
-    M = cv2.getPerspectiveTransform(birdPoint, np.float32(roiPoints))
-    laneMask = masks[-1]
-    # boundryMask = cv2.warpPerspective(boundryMask, M, (1280, 720), cv2.INTER_LINEAR)
-    laneMask = cv2.warpPerspective(laneMask, M, (1280, 720))
-    displayedFrame = cv2.addWeighted(srcFrame, 1, laneMask, 0.25, 0)
-    # displayedFrame = cv2.add(displayedFrame, boundryMask)
-    return displayedFrame
-
-
 def getLaneWidthVariance(leftYPoints, rightYPoints, leftParams, rightParams):
     # approximate lane width
     leftUpperX = predictXVal(0, leftParams)
@@ -249,7 +238,6 @@ def getSlopeVariance(leftYPoints, rightYPoints, leftParams, rightParams):
 def linesInParallel(leftYPoints, rightYPoints, leftParams, rightParams):
     distRange = getLaneWidthVariance(leftYPoints, rightYPoints, leftParams, rightParams)
     slopeDifference = getSlopeVariance(leftYPoints, rightYPoints, leftParams, rightParams)
-
     distInRange = False if distRange > 150 else True
     slopeInRange = False if slopeDifference > 1 else True
 
