@@ -1,4 +1,4 @@
-from LaneDetector import Detector
+from LaneDetector import Detector, Pipeline
 import time
 import cv2
 import sys
@@ -21,7 +21,7 @@ def main(arg_vars):
     print("extension: ", media_extension)
     supported_imgs = ["jpg", "png", "jpeg"]
     supported_videos = ["mp4"]
-    detector = Detector((1280, 720, 3))               
+    detector = Pipeline((1280, 720, 3))               
 
     if media_extension in supported_imgs:
         img = cv2.imread(media_path)

@@ -1,4 +1,5 @@
 from decimal import Decimal
+from LaneDetector.utils import profiling
 import numpy as np
 import imutils
 import pickle
@@ -115,6 +116,7 @@ class Detector:
         return fgSteerWheel
 
     @staticmethod
+    # @profiling.timer
     def getLaneMask(bgrFrame, minEdge, maxEdge, satThresh, hueThresh, redThresh):
         """
         Applies color bluring, thresholding and edge detection on a bgr image
@@ -167,7 +169,8 @@ class Detector:
         rightCenter = (rightXcPoint, self.frameShape[0] - self.windowHeight//2)
         leftCenter = (leftXcPoint, self.frameShape[0] - self.windowHeight//2)
         return leftCenter, rightCenter, xAxisHisto
-
+    
+    # @profiling.timer
     def getLanePoints(self, binaryImg):
         """
         Applies blind search for the lane points (white pixels on black background)
@@ -206,13 +209,11 @@ class Detector:
 
             leftCenter = leftCenter[0], leftCenter[1] - self.windowHeight
             if leftWindowPoints.sum() > self.threshold:
-                #         xC = np.int(np.median(noneZeroXIds[leftWindowPoints]))
                 lXc = np.int(noneZeroXIds[leftWindowPoints].mean())
                 leftCenter = (lXc, leftCenter[1])
 
             rightCenter = rightCenter[0], rightCenter[1] - self.windowHeight
             if rightWindowPoints.sum() > self.threshold:
-                #         xC = np.int(np.median(noneZeroXIds[leftWindowPoints]))
                 rXc = np.int(noneZeroXIds[rightWindowPoints].mean())
                 rightCenter = (rXc, rightCenter[1])
 
@@ -226,6 +227,7 @@ class Detector:
         return (leftXPoints, leftYPoints), (rightXPoints, rightYPoints)
 
     @staticmethod
+    # @profiling.timer
     def fitLaneLines(leftLinePoints, rightLinePoints, order=2):
         """
         Fits lines to a given lane lines
@@ -261,6 +263,7 @@ class Detector:
         lineXVals = a*lineYVals**2 + b*lineYVals + c
         return  lineXVals, lineYVals
 
+    # @profiling.timer
     def predictLaneLines(self, binaryImg, margin, smoothThresh=5):
         """
         Predicts lane line in a new frame based on previous detection from blind search
@@ -308,6 +311,7 @@ class Detector:
         rightLineXc = a*Yc**2 + b*Yc + c
         self.laneMidPoint = int(((rightLineXc - leftLineXc) // 2) + leftLineXc)
 
+    # @profiling.timer
     def plotSteeringWheel(self, srcImg):
         angle = (self.laneMidPoint - self.carHeadMidPoint) // -3
         steerWheelHeight, steerWheelWidth = self.steerWheel.shape[:2]
@@ -321,6 +325,7 @@ class Detector:
         return srcImg
 
     @staticmethod
+    # @profiling.timer
     def plotPredictionBoundry(warpedImg, leftLinePoints, rightLinePoints, margin):
         """
         Plot the detected lane lines and lane area over a given image
@@ -343,11 +348,10 @@ class Detector:
         rightLaneBoundry = np.flipud(np.array(righLine, "int"))
         laneBoundry = list(np.vstack([leftLaneBoundry, rightLaneBoundry]).reshape(1, -1, 2))
         cv2.fillPoly(laneMask, laneBoundry, (0, 255, 0))
-        # boundryMask = np.zeros_like(warped3DImg)
-        # cv2.polylines(laneMask, [np.array(leftLine, "int32")], False, (15, 0, 15), 33)
-        # cv2.polylines(laneMask, [np.array(righLine, "int32")], False, (15, 0, 15), 33)
+        
         return laneMask
 
+    # @profiling.timer
     def plotLaneMarker(self, frame):
         carCenterPt1 = self.carHeadMidPoint, 670
         carCenterPt2 = self.carHeadMidPoint, 670 - 100
@@ -363,6 +367,7 @@ class Detector:
         cv2.line(frame, leftCenterMarkerPt1, leftCenterMarkerPt2, (0, 0, 255), 3)
         cv2.line(frame, rightCenterMarkerPt1, rightCenterMarkerPt2, (0, 0, 255), 3)
 
+    # @profiling.timer
     def applyLaneMasks(self, srcFrame, *masks):
         """
         Applies detected lane mask over source image to be displayed
@@ -381,12 +386,9 @@ class Detector:
             displayedFrame = cv2.addWeighted(srcFrame, 1, laneMask, 0.25, 0)
         self.plotLaneMarker(displayedFrame)
         self.plotSteeringWheel(displayedFrame)
-
-       
-        # displayedFrame = cv2.add(displayedFrame, boundryMask)
-
         return displayedFrame
 
+    # @profiling.timer
     def __call__(self, bgrImg):
         """
         Applies the detector functionality over a given frame
@@ -402,9 +404,9 @@ class Detector:
         binaryLanes = Detector.getLaneMask(displayedFrame, 33, 175, 110, 30, 170)
         birdFrame = cv2.warpPerspective(binaryLanes, self.roi2birdTransMtx, (1280, 720))
 
-
-        if len(self.allLeftParams) > 2 and len(self.allRightParams) > 2:
+        if len(self.allRightParams) > 2:
             leftLinePoints, rightLinePoints = self.predictLaneLines(birdFrame, margin=100)
+
         else:
             leftLinePoints, rightLinePoints = self.getLanePoints(birdFrame)
 
@@ -413,10 +415,8 @@ class Detector:
         leftLinePoints = Detector.genLinePoints(leftLineParams, lane_max_height)
         rightLinePoints = Detector.genLinePoints(rightLineParams, lane_max_height)
         self.setLaneXcPoint(leftLineParams, rightLineParams, 670)
-        # print(self.carHeadMidPoint, self.laneMidPoint)
         laneMask = Detector.plotPredictionBoundry(birdFrame, leftLinePoints, rightLinePoints, margin=100)
         displayedFrame = self.applyLaneMasks(displayedFrame, laneMask)
         self.allLeftParams.append(leftLineParams)
         self.allRightParams.append(rightLineParams)
-
         return displayedFrame

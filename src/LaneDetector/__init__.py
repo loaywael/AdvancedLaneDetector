@@ -1,1 +1,2 @@
 from LaneDetector.Detector import Detector
+from LaneDetector.utils.DetectionPipeline import Pipeline
