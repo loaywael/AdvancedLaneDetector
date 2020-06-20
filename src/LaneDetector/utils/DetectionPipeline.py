@@ -6,23 +6,10 @@ import cv2
 class Pipeline(Detector):
     def __init__(self, *args, **kwargs):
         super(Pipeline, self).__init__(*args, **kwargs)
-        self.roiPoints = np.array([
-            [ 527, 450.],
-            [ 782, 450.],
-            [1070, 666.],
-            [ 275, 666.]
-        ])
-        print(self.roiPoints)
         self.rightPoints = None
         self.rightParams = None
         self.leftPoints = None
         self.leftParams = None
-
-    def colorfyGetPoints(self, srcImg):
-        outImg = np.dstack([srcImg, srcImg, srcImg])
-        outImg[self.leftPoints[::-1]] = [255, 0, 0]
-        outImg[self.rightPoints[::-1]] = [0, 0, 255]
-        return outImg
 
     def colorfyLaneBoundry(self, coloredWarpedLanes):
         srcImg = coloredWarpedLanes.copy()
@@ -81,11 +68,10 @@ class Pipeline(Detector):
         dstImg1 = cv2.warpPerspective(displayedFrame, self.roi2birdTransMtx, (1280, 720))
 
         binaryLanes = Detector.getLaneMask(dstImg1, 33, 175, 110, 30, 170)
-        self.leftPoints, self.rightPoints = self.getLanePoints(binaryLanes)
-        dstImg2 = self.colorfyGetPoints(binaryLanes)
+        dstImg2, self.leftPoints, self.rightPoints = self.getLanePoints(binaryLanes, visualize=True)
         self.leftParams, self.rightParams = self.fitLaneLines(self.leftPoints, self.rightPoints)
 
         dstImg3, dstImg4 = self.colorfyLaneBoundry(dstImg2)
-        fullBoard = Pipeline.getPipeLineBoard(dstImg1, dstImg2, dstImg3, dstImg4, 0.5)
+        fullBoard = Pipeline.getPipeLineBoard(np.dstack([binaryLanes]*3), dstImg2, dstImg3, dstImg4, 0.5)
   
         return fullBoard

@@ -41,12 +41,14 @@ class Detector:
     applyLaneMasks(self, srcFrame, *masks)
     __call__(self, img)
     """
-    def __init__(self, frameShape, windowWidth=175, numWindows=11, threshold=55):
+    def __init__(self, roiPoints, frameShape, windowWidth=175, numWindows=11, threshold=33):
         """
         @param windowWidth: (int) window width (horizontal distance between diagonals)
         @param windowWidth: (int) number of windows allowed to be stacked on top of each other
         @param threshold: (int) minimum points to be considered as part of the lane
         """
+        self.roiPoints = np.float32(roiPoints)
+        self.birdPoints = Detector.trans2BirdPoint(self.roiPoints)
         self.frameShape = (*frameShape[-2::-1], frameShape[-1])
         self.windowWidth = windowWidth
         self.numWindows = numWindows
@@ -57,15 +59,14 @@ class Detector:
         self.allLeftParams = []
         self.laneMidPoint = None
         self.carHeadMidPoint = self.frameShape[1] // 2
-        self.roiPoints = Detector.loadFile(self.path+"roiPoly.sav")
-        self.roiPoints = np.float32(self.roiPoints)
-        self.birdPoints = Detector.trans2BirdPoint(self.roiPoints)
-        self.roi2birdTransMtx = cv2.getPerspectiveTransform(self.roiPoints, self.birdPoints)
-        self.bird2roiTransMtx = cv2.getPerspectiveTransform(self.birdPoints, self.roiPoints)
         self.steerWheel = Detector.initSteerWheelFG()
         self.camModel = Detector.loadFile(self.path+"camCalibMatCoeffs.sav")
         self.dstCoeffs = self.camModel["dstCoeffs"]
         self.camMtx = self.camModel["camMtx"]
+        self.dstInMeter = 0
+        self.curveRadiusInMeter = 0
+        self.roi2birdTransMtx = cv2.getPerspectiveTransform(self.roiPoints, self.birdPoints)
+        self.bird2roiTransMtx = cv2.getPerspectiveTransform(self.birdPoints, self.roiPoints)
     
     @staticmethod
     def save2File(path, obj):
@@ -171,7 +172,7 @@ class Detector:
         return leftCenter, rightCenter, xAxisHisto
     
     # @profiling.timer
-    def getLanePoints(self, binaryImg):
+    def getLanePoints(self, binaryImg, visualize=False):
         """
         Applies blind search for the lane points (white pixels on black background)
         using the sliding window algorithm starting from the centers of the histogram peaks
@@ -190,13 +191,14 @@ class Detector:
         noneZeroXIds = np.array(noneZeroIds[1])
         noneZeroYIds = np.array(noneZeroIds[0])
         leftCenter, rightCenter, _ = self.getInitialCenters(binaryImg)
+        if visualize:
+            scanedImg = np.dstack([binaryImg]*3)
 
         for i in range(1, self.numWindows+1):
             leftLinePt1 = (leftCenter[0]-self.windowWidth//2, leftCenter[1]-self.windowHeight//2)
             leftLinePt2 = (leftCenter[0]+self.windowWidth//2, leftCenter[1]+self.windowHeight//2)
             rightLinePt1 = (rightCenter[0]-self.windowWidth//2, rightCenter[1]-self.windowHeight//2)
             rightLinePt2 = (rightCenter[0]+self.windowWidth//2, rightCenter[1]+self.windowHeight//2)
-
             leftWindowXIds = (noneZeroXIds > leftLinePt1[0]) & (noneZeroXIds < leftLinePt2[0])
             leftWindowYIds = (noneZeroYIds > leftLinePt1[1]) & (noneZeroYIds < leftLinePt2[1])
             leftWindowPoints = leftWindowXIds & leftWindowYIds
@@ -216,6 +218,11 @@ class Detector:
             if rightWindowPoints.sum() > self.threshold:
                 rXc = np.int(noneZeroXIds[rightWindowPoints].mean())
                 rightCenter = (rXc, rightCenter[1])
+            
+            if visualize:
+                cv2.rectangle(scanedImg, leftLinePt1, leftLinePt2, (0, 255, 0), 3)
+                cv2.rectangle(scanedImg, rightLinePt1, rightLinePt2, (0, 255, 0), 3)
+                
 
         leftLanePixelsIds = np.sum(np.array(leftLanePixelsIds), axis=0).astype("bool")
         rightLanePixelsIds = np.sum(np.array(rightLanePixelsIds), axis=0).astype("bool")
@@ -224,6 +231,10 @@ class Detector:
         rightXPoints = noneZeroXIds[rightLanePixelsIds]
         rightYPoints = noneZeroYIds[rightLanePixelsIds]
 
+        if visualize:
+            scanedImg[leftYPoints, leftXPoints] = [255, 0, 0]
+            scanedImg[rightYPoints, rightXPoints] = [0, 0, 255]
+            return scanedImg, (leftXPoints, leftYPoints), (rightXPoints, rightYPoints)
         return (leftXPoints, leftYPoints), (rightXPoints, rightYPoints)
 
     @staticmethod
@@ -264,7 +275,7 @@ class Detector:
         return  lineXVals, lineYVals
 
     # @profiling.timer
-    def predictLaneLines(self, binaryImg, margin, smoothThresh=5):
+    def predictLaneLines(self, binaryImg, margin, smoothThresh=5, visualize=False):
         """
         Predicts lane line in a new frame based on previous detection from blind search
         
@@ -298,10 +309,16 @@ class Detector:
         leftYPoints = noneZeroYIds[leftLineBoundryIds]
         rightXPoints = noneZeroXIds[rightLineBoundryIds]
         rightYPoints = noneZeroYIds[rightLineBoundryIds]
-        
+
+        if visualize:
+            scanedImg = np.dstack([binaryImg]*3)
+            scanedImg[leftYPoints, leftXPoints] = [255, 0, 0]
+            scanedImg[rightYPoints, rightXPoints] = [0, 0, 255]
+            return scanedImg, (leftXPoints, leftYPoints), (rightXPoints, rightYPoints)
+
         return (leftXPoints, leftYPoints), (rightXPoints, rightYPoints)
     
-    def setLaneXcPoint(self, leftLineParams, rightLineParams, Yc=670):
+    def setLaneXcPoint(self, leftLineParams, rightLineParams, Yc=620, xPx2Mt=3.7/850):
         """
 
         """
@@ -310,10 +327,12 @@ class Detector:
         a, b, c = rightLineParams
         rightLineXc = a*Yc**2 + b*Yc + c
         self.laneMidPoint = int(((rightLineXc - leftLineXc) // 2) + leftLineXc)
+        self.dstInMeter = (self.laneMidPoint - self.carHeadMidPoint) * xPx2Mt
 
     # @profiling.timer
     def plotSteeringWheel(self, srcImg):
-        angle = (self.laneMidPoint - self.carHeadMidPoint) // -3
+        distance = (self.laneMidPoint - self.carHeadMidPoint)
+        angle = distance // -3
         steerWheelHeight, steerWheelWidth = self.steerWheel.shape[:2]
         center = steerWheelWidth//2, steerWheelHeight//2
         rotMtx = cv2.getRotationMatrix2D(center, angle, 1.0)
@@ -323,6 +342,16 @@ class Detector:
         steerWheel = cv2.add(fgSteerWheel, roiPatch)
         srcImg[50:50+steerWheelHeight, 550:550+steerWheelWidth] = steerWheel
         return srcImg
+
+    def getCurveRadius(self, y, leftLinePoints, rightLinePoints, yPx2Mt=30/720, xPx2Mt=3.7/850):
+        # yPoints = np.linspace(0, self.frameShape[0]-1, self.frameShape[0])
+        realLeftParams = np.polyfit(leftLinePoints[1]*yPx2Mt, leftLinePoints[0]*xPx2Mt, 2)
+        realRightParams = np.polyfit(rightLinePoints[1]*yPx2Mt, rightLinePoints[0]*xPx2Mt, 2)
+        a, b, c = realLeftParams
+        leftCurveRadius = ((1 + (2*a*y*yPx2Mt+b)**2)**1.5) / np.abs(2*a)
+        a, b, c = realRightParams
+        rightCurveRadius = ((1 + (2*a*y*yPx2Mt+b)**2)**1.5) / np.abs(2*a)
+        self.curveRadiusInMeter = np.mean([rightCurveRadius, leftCurveRadius], axis=0)
 
     @staticmethod
     # @profiling.timer
@@ -348,13 +377,14 @@ class Detector:
         rightLaneBoundry = np.flipud(np.array(righLine, "int"))
         laneBoundry = list(np.vstack([leftLaneBoundry, rightLaneBoundry]).reshape(1, -1, 2))
         cv2.fillPoly(laneMask, laneBoundry, (0, 255, 0))
+        # cv2.rectangle(laneMask, (0, 0), (250, 100), (125, 125, 125), -1)
         
         return laneMask
 
     # @profiling.timer
     def plotLaneMarker(self, frame):
         carCenterPt1 = self.carHeadMidPoint, 670
-        carCenterPt2 = self.carHeadMidPoint, 670 - 100
+        carCenterPt2 = self.carHeadMidPoint, 670 - 75
         laneCenterPt1 = self.laneMidPoint, 670
         laneCenterPt2 = self.laneMidPoint, 670 - 50
         leftCenterMarkerPt1 = (laneCenterPt1[0]-180, laneCenterPt1[1])
@@ -362,13 +392,14 @@ class Detector:
         rightCenterMarkerPt1 = (laneCenterPt1[0]+180, laneCenterPt1[1])
         rightCenterMarkerPt2 = (laneCenterPt2[0]+180, laneCenterPt2[1])
 
-        cv2.line(frame, carCenterPt1, carCenterPt2, (255, 0, 0), 5)
-        cv2.line(frame, laneCenterPt1, laneCenterPt2, (0, 255, 0), 5)
+        cv2.arrowedLine(frame, (self.carHeadMidPoint, 645), (self.laneMidPoint-5, 645), (0, 0, 255), 3)
+        cv2.line(frame, carCenterPt1, carCenterPt2, (255, 0, 0), 3)
+        cv2.line(frame, laneCenterPt1, laneCenterPt2, (0, 255, 0), 3)
         cv2.line(frame, leftCenterMarkerPt1, leftCenterMarkerPt2, (0, 0, 255), 3)
         cv2.line(frame, rightCenterMarkerPt1, rightCenterMarkerPt2, (0, 0, 255), 3)
 
     # @profiling.timer
-    def applyLaneMasks(self, srcFrame, *masks):
+    def applyLaneMasks(self, srcFrame, mask, visualizedMask=None):
         """
         Applies detected lane mask over source image to be displayed
 
@@ -381,9 +412,15 @@ class Detector:
         """
         # laneMask = masks[-1]
         # boundryMask = cv2.warpPerspective(boundryMask, M, (1280, 720), cv2.INTER_LINEAR)
-        for mask in masks:
-            laneMask = cv2.warpPerspective(mask, self.bird2roiTransMtx, (1280, 720))
-            displayedFrame = cv2.addWeighted(srcFrame, 1, laneMask, 0.25, 0)
+        # for mask in masks:
+        cv2.putText(srcFrame, f"Radius of curvature: {int(self.curveRadiusInMeter)} (m)", (15, 45),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
+        cv2.putText(srcFrame, f"Distance of curvature: {int(self.dstInMeter*100)} (cm)", (15, 75),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
+        laneMask = cv2.warpPerspective(mask, self.bird2roiTransMtx, (1280, 720))
+        displayedFrame = cv2.addWeighted(srcFrame, 1, laneMask, 0.25, 0)
+        if isinstance(visualizedMask, (np.ndarray)):
+            cv2.addWeighted(visualizedMask, 1.0, mask=0.5)
         self.plotLaneMarker(displayedFrame)
         self.plotSteeringWheel(displayedFrame)
         return displayedFrame
@@ -412,8 +449,10 @@ class Detector:
 
         lane_max_height = birdFrame.shape[0]
         leftLineParams, rightLineParams = Detector.fitLaneLines(leftLinePoints, rightLinePoints, order=2)    
+        # self.getCurveRadius(670, leftLineParams, rightLineParams)
         leftLinePoints = Detector.genLinePoints(leftLineParams, lane_max_height)
         rightLinePoints = Detector.genLinePoints(rightLineParams, lane_max_height)
+        self.getCurveRadius(720, leftLinePoints, rightLinePoints)
         self.setLaneXcPoint(leftLineParams, rightLineParams, 670)
         laneMask = Detector.plotPredictionBoundry(birdFrame, leftLinePoints, rightLinePoints, margin=100)
         displayedFrame = self.applyLaneMasks(displayedFrame, laneMask)

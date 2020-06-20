@@ -7,6 +7,12 @@ import os
 
 def main(arg_vars):
     media_name = None
+    roiPoints =[
+            [ 500, 500.],
+            [ 782, 500.],
+            [1070, 666.],
+            [ 275, 666.]
+        ]
     if len(arg_vars) == 1:
         media_path = arg_vars[0] 
     elif len(arg_vars) == 2:
@@ -21,7 +27,7 @@ def main(arg_vars):
     print("extension: ", media_extension)
     supported_imgs = ["jpg", "png", "jpeg"]
     supported_videos = ["mp4"]
-    detector = Pipeline((1280, 720, 3))               
+    detector = Pipeline(roiPoints, (1280, 720, 3))               
 
     if media_extension in supported_imgs:
         img = cv2.imread(media_path)
@@ -51,14 +57,16 @@ def main(arg_vars):
                 detectedImg = detector(frame)
                 ###############################################
                 t2 = time.time()
-                cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (15, 25),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
+                # cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (15, 25),
+                #     cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
                 cv2.imshow("detection", detectedImg)
                 if media_name:
                     vidWriter.write(detectedImg)
                 k = cv2.waitKey(1)
                 if k & 0xFF == ord('q'):
                     break
+                elif k == ord('p'):
+                    cv2.waitKey(0)
             else:
                 break
         cap.release()
