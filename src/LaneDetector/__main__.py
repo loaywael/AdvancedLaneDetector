@@ -14,8 +14,8 @@ def main(arg_vars):
         # "bottomRight" : [1150, 666.],
         # "bottomLeft"  : [ 130, 666.]
         #-----------------------------
-        "topLeft"     : [ 568, 460],
-        "topRight"    : [ 717, 460],
+        "topLeft"     : [ 568, 455],
+        "topRight"    : [ 717, 455],
         "bottomRight" : [ 1043, 680],
         "bottomLeft"  : [260, 680]
         #-----------------------------
@@ -39,8 +39,8 @@ def main(arg_vars):
     print("extension: ", media_extension)
     supported_imgs = ["jpg", "png", "jpeg"]
     supported_videos = ["mp4"]
-    detector = Pipeline(roiPoints, (1280, 720, 3))               
-    # detector = Detector(roiPoints, (1280, 720, 3))               
+    # detector = Pipeline(roiPoints, (1280, 720, 3))               
+    detector = Detector(roiPoints, (1280, 720, 3))               
 
     if media_extension in supported_imgs:
         img = cv2.imread(media_path)
