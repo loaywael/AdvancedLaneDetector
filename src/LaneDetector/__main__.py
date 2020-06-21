@@ -1,4 +1,5 @@
 from LaneDetector import Detector, Pipeline
+import argparse
 import time
 import cv2
 import sys
@@ -7,12 +8,23 @@ import os
 
 def main(arg_vars):
     media_name = None
-    roiPoints =[
-            [ 500, 500.],
-            [ 782, 500.],
-            [1070, 666.],
-            [ 275, 666.]
-        ]
+    roiPoints = {
+        # "topLeft"     : [ 475, 475.],
+        # "topRight"    : [ 805, 475.],
+        # "bottomRight" : [1150, 666.],
+        # "bottomLeft"  : [ 130, 666.]
+        #-----------------------------
+        "topLeft"     : [ 568, 460],
+        "topRight"    : [ 717, 460],
+        "bottomRight" : [ 1043, 680],
+        "bottomLeft"  : [260, 680]
+        #-----------------------------
+        # "topLeft"     : [ 546, 425],
+        # "topRight"    : [ -100, 680],
+        # "bottomRight" : [ 716, 425],
+        # "bottomLeft"  : [1380, 680]
+    }
+
     if len(arg_vars) == 1:
         media_path = arg_vars[0] 
     elif len(arg_vars) == 2:
@@ -28,6 +40,7 @@ def main(arg_vars):
     supported_imgs = ["jpg", "png", "jpeg"]
     supported_videos = ["mp4"]
     detector = Pipeline(roiPoints, (1280, 720, 3))               
+    # detector = Detector(roiPoints, (1280, 720, 3))               
 
     if media_extension in supported_imgs:
         img = cv2.imread(media_path)
@@ -47,8 +60,8 @@ def main(arg_vars):
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         if media_name:
-            fourcc = 0x7634706d#cv2.VideoWriter_fourcc(*"MP4V")
-            vidWriter = cv2.VideoWriter("../assets/" + media_name, fourcc, fps, (width, height))
+            fourcc = 0x7634706d #cv2.VideoWriter_fourcc(*"MP4V")
+            vidWriter = cv2.VideoWriter("../assets/"+media_name, fourcc, fps, (width, height))
         while True:
             ret, frame = cap.read()
             if ret:
@@ -57,8 +70,8 @@ def main(arg_vars):
                 detectedImg = detector(frame)
                 ###############################################
                 t2 = time.time()
-                # cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (15, 25),
-                #     cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
+                cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (1100, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
                 cv2.imshow("detection", detectedImg)
                 if media_name:
                     vidWriter.write(detectedImg)

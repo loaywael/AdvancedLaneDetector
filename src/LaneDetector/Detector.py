@@ -1,5 +1,5 @@
-from decimal import Decimal
 from LaneDetector.utils import profiling
+from queue import Queue
 import numpy as np
 import imutils
 import pickle
@@ -41,32 +41,37 @@ class Detector:
     applyLaneMasks(self, srcFrame, *masks)
     __call__(self, img)
     """
-    def __init__(self, roiPoints, frameShape, windowWidth=175, numWindows=11, threshold=33):
+    def __init__(self, roiPoints, frameShape, windowWidth=200, numWindows=9, threshold=33):
         """
         @param windowWidth: (int) window width (horizontal distance between diagonals)
         @param windowWidth: (int) number of windows allowed to be stacked on top of each other
         @param threshold: (int) minimum points to be considered as part of the lane
         """
-        self.roiPoints = np.float32(roiPoints)
-        self.birdPoints = Detector.trans2BirdPoint(self.roiPoints)
+        self.nframes = 0
+        self.roiPoints = []
+        self.birdPoints = []
+        self.allLeftParams = []
+        self.allRightParams = []
+        self.path = "configs/"
+        self.dstInMeter = 0
+        self.laneMidPoint = None
+        self.curveRadiusInMeter = 0
+        self.roi2birdTransMtx = None
+        self.bird2roiTransMtx = None
+        self.setWarpMatrices(roiPoints)
+        # ---------------------------
         self.frameShape = (*frameShape[-2::-1], frameShape[-1])
         self.windowWidth = windowWidth
         self.numWindows = numWindows
         self.windowHeight = np.int(self.frameShape[0] // numWindows)
         self.threshold = threshold
-        self.path = "configs/"
-        self.allRightParams = []
-        self.allLeftParams = []
-        self.laneMidPoint = None
         self.carHeadMidPoint = self.frameShape[1] // 2
         self.steerWheel = Detector.initSteerWheelFG()
+        # -------------------------------------------
         self.camModel = Detector.loadFile(self.path+"camCalibMatCoeffs.sav")
         self.dstCoeffs = self.camModel["dstCoeffs"]
         self.camMtx = self.camModel["camMtx"]
-        self.dstInMeter = 0
-        self.curveRadiusInMeter = 0
-        self.roi2birdTransMtx = cv2.getPerspectiveTransform(self.roiPoints, self.birdPoints)
-        self.bird2roiTransMtx = cv2.getPerspectiveTransform(self.birdPoints, self.roiPoints)
+        
     
     @staticmethod
     def save2File(path, obj):
@@ -89,19 +94,23 @@ class Detector:
         with open(path, "rb") as rf:
             return pickle.load(rf)
 
-    @staticmethod
-    def trans2BirdPoint(roiPoints):
+    def setWarpMatrices(self, roiPoints):
         """
         Map ROI points to bird view points
 
         @param roiPoints: ROI lane roiPoints to be warped from polygon to rectangle
         """
-        birdPoints = np.array([
-            [roiPoints[-1][0], roiPoints[0][1]],
-            [roiPoints[2][0], roiPoints[0][1]],
-            roiPoints[2], roiPoints[-1]
+        self.roiPoints = np.float32([
+            roiPoints["topLeft"],
+            roiPoints["bottomLeft"],
+            roiPoints["topRight"],
+            roiPoints["bottomRight"]
         ])
-        return birdPoints
+        self.birdPoints = np.float32([[250, 0], [250, 720], [1000, 0], [1000, 720]])
+        # self.birdPoints = np.float32([[100, 0], [100, 680], [1180, 0], [1180, 680]])
+
+        self.roi2birdTransMtx = cv2.getPerspectiveTransform(self.roiPoints, self.birdPoints)
+        self.bird2roiTransMtx = cv2.getPerspectiveTransform(self.birdPoints, self.roiPoints)
 
     @staticmethod
     def initSteerWheelFG():
@@ -332,15 +341,15 @@ class Detector:
     # @profiling.timer
     def plotSteeringWheel(self, srcImg):
         distance = (self.laneMidPoint - self.carHeadMidPoint)
-        angle = distance // -3
+        angle = distance // -2
         steerWheelHeight, steerWheelWidth = self.steerWheel.shape[:2]
         center = steerWheelWidth//2, steerWheelHeight//2
         rotMtx = cv2.getRotationMatrix2D(center, angle, 1.0)
         fgSteerWheel = cv2.warpAffine(self.steerWheel, rotMtx, (steerWheelWidth, steerWheelHeight))
-        roiPatch = srcImg[50:50+steerWheelHeight, 550:550+steerWheelWidth]
+        roiPatch = srcImg[150:150+steerWheelHeight, 100:100+steerWheelWidth]
         roiPatch[fgSteerWheel > 1] = 0
         steerWheel = cv2.add(fgSteerWheel, roiPatch)
-        srcImg[50:50+steerWheelHeight, 550:550+steerWheelWidth] = steerWheel
+        srcImg[150:150+steerWheelHeight, 100:100+steerWheelWidth] = steerWheel
         return srcImg
 
     def getCurveRadius(self, y, leftLinePoints, rightLinePoints, yPx2Mt=30/720, xPx2Mt=3.7/850):
@@ -413,10 +422,10 @@ class Detector:
         # laneMask = masks[-1]
         # boundryMask = cv2.warpPerspective(boundryMask, M, (1280, 720), cv2.INTER_LINEAR)
         # for mask in masks:
-        cv2.putText(srcFrame, f"Radius of curvature: {int(self.curveRadiusInMeter)} (m)", (15, 45),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
-        cv2.putText(srcFrame, f"Distance of curvature: {int(self.dstInMeter*100)} (cm)", (15, 75),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
+        cv2.putText(srcFrame, f"Radius of curvature: {abs(int(self.curveRadiusInMeter))} (m)", (25, 50),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
+        cv2.putText(srcFrame, f"Distance from camera center: {abs(int(self.dstInMeter*100))} (cm)", (25, 80),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
         laneMask = cv2.warpPerspective(mask, self.bird2roiTransMtx, (1280, 720))
         displayedFrame = cv2.addWeighted(srcFrame, 1, laneMask, 0.25, 0)
         if isinstance(visualizedMask, (np.ndarray)):
@@ -441,11 +450,11 @@ class Detector:
         binaryLanes = Detector.getLaneMask(displayedFrame, 33, 175, 110, 30, 170)
         birdFrame = cv2.warpPerspective(binaryLanes, self.roi2birdTransMtx, (1280, 720))
 
-        if len(self.allRightParams) > 2:
-            leftLinePoints, rightLinePoints = self.predictLaneLines(birdFrame, margin=100)
 
-        else:
+        if self.nframes % 5 == 0 or self.nframes < 10:
             leftLinePoints, rightLinePoints = self.getLanePoints(birdFrame)
+        else: #len(self.allRightParams) > 2:
+            leftLinePoints, rightLinePoints = self.predictLaneLines(birdFrame, smoothThresh=9, margin=100)
 
         lane_max_height = birdFrame.shape[0]
         leftLineParams, rightLineParams = Detector.fitLaneLines(leftLinePoints, rightLinePoints, order=2)    
@@ -458,4 +467,6 @@ class Detector:
         displayedFrame = self.applyLaneMasks(displayedFrame, laneMask)
         self.allLeftParams.append(leftLineParams)
         self.allRightParams.append(rightLineParams)
+        self.nframes += 1
+
         return displayedFrame

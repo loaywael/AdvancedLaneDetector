@@ -1,6 +1,6 @@
 import numpy as np
 import pickle
-
+import cv2
 
 def updatePoints(event, x, y, flags, params):
     """
@@ -22,7 +22,7 @@ def updatePoints(event, x, y, flags, params):
 
 
 
-def drawRoIPoly(img, points):
+def drawRoIPoly(img, points, size=9):
     """
     Draws the Lane ROI polygon that visualize the points to be warped
 
@@ -30,8 +30,8 @@ def drawRoIPoly(img, points):
     @points: list of points of the Lane ROI
     """
     for pt in points:
-        cv2.circle(img, pt, 7, (0, 0, 255), -1)
-    cv2.polylines(img, [np.array(points)], True, (255, 0, 0), 2)
+        cv2.circle(img, tuple(pt), size, (0, 0, 255), -1)
+    cv2.polylines(img, [points.astype(np.int32)], True, (255, 0, 0), 2)
     return img
 
 

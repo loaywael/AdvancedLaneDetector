@@ -1,4 +1,5 @@
 from LaneDetector import Detector
+from LaneDetector.utils.toolbox import drawRoIPoly
 import numpy as np
 import cv2
 
@@ -66,12 +67,13 @@ class Pipeline(Detector):
         undist_frame = cv2.undistort(X, self.camMtx, self.dstCoeffs, None, self.camMtx)
         displayedFrame = undist_frame.copy()
         dstImg1 = cv2.warpPerspective(displayedFrame, self.roi2birdTransMtx, (1280, 720))
+        drawRoIPoly(displayedFrame, self.roiPoints)
 
         binaryLanes = Detector.getLaneMask(dstImg1, 33, 175, 110, 30, 170)
         dstImg2, self.leftPoints, self.rightPoints = self.getLanePoints(binaryLanes, visualize=True)
         self.leftParams, self.rightParams = self.fitLaneLines(self.leftPoints, self.rightPoints)
 
         dstImg3, dstImg4 = self.colorfyLaneBoundry(dstImg2)
-        fullBoard = Pipeline.getPipeLineBoard(np.dstack([binaryLanes]*3), dstImg2, dstImg3, dstImg4, 0.5)
+        fullBoard = Pipeline.getPipeLineBoard(dstImg1, dstImg2, dstImg3, dstImg4, 0.5)
   
         return fullBoard
