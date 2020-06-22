@@ -1,5 +1,4 @@
 from LaneDetector.utils import profiling
-from queue import Queue
 import numpy as np
 import imutils
 import pickle
@@ -51,14 +50,16 @@ class Detector:
     setCurveRadius(self, leftLinePoints, rightLinePoints, y, yPx2Mt=30/720, xPx2Mt=3.7/850)
     plotSteeringWheel(self, srcFrame)
     plotLaneMarker(self, srcFrame)
-    plotPredictionBoundry(binaryImg, leftLinePoints, rightLinePoints, margin)
+    plotPredictionBoundry(binaryImg, leftLinePoints, rightLinePoints)
     applyLaneMasks(self, srcFrame, mask)
     __call__(self, bgrFrame)
     """
     def __init__(self, roiPoints, frameShape, windowWidth=200, numWindows=13, threshold=33):
         """
+        @param roiPoints: (dict) ROI lane roiPoints to be warped from polygon to rectangle
+        @param frameShape: (tuple) shape of the expcted input frames
         @param windowWidth: (int) window width (horizontal distance between diagonals)
-        @param windowWidth: (int) number of windows allowed to be stacked on top of each other
+        @param numWindows: (int) number of windows allowed to be stacked on top of each other
         @param threshold: (int) minimum points to be considered as part of the lane
         """
         self.roiPoints = []
@@ -68,11 +69,11 @@ class Detector:
         self.path = "configs/"
         self.dstInMeter = 0
         self.laneMidPoint = None
+        self.frameShape = (*frameShape[-2::-1], frameShape[-1])
         self.carHeadMidPoint = self.frameShape[1] // 2
         self.curveRadiusInMeter = 0
         self.roi2birdTransMtx = None
         self.bird2roiTransMtx = None
-        self.frameShape = (*frameShape[-2::-1], frameShape[-1])
         self.windowWidth = windowWidth
         self.numWindows = numWindows
         self.windowHeight = np.int(self.frameShape[0] // numWindows)
@@ -133,7 +134,7 @@ class Detector:
         =======
         fgSteerWheel: (np.3darray) steering wheel foreground mask
         """
-        steerWheel = cv2.imread(assetPath+teering_wheel.png")
+        steerWheel = cv2.imread(assetPath+"steering_wheel.png")
         steerWheel = cv2.resize(steerWheel, None, fx=0.25, fy=0.25)
         steerWheelMask = cv2.cvtColor(steerWheel, cv2.COLOR_BGR2GRAY)
         steerWheelMask = cv2.medianBlur(steerWheelMask, 3)
@@ -264,7 +265,6 @@ class Detector:
             return scanedImg, (leftXPoints, leftYPoints), (rightXPoints, rightYPoints)
         return (leftXPoints, leftYPoints), (rightXPoints, rightYPoints)
 
-    @staticmethod
     def predictLaneLines(self, binaryImg, margin, smoothThresh=5, visualize=False):
         """
         Predicts lane line in a new frame based on previous detection from blind search
@@ -429,14 +429,13 @@ class Detector:
 
     @staticmethod
     # @profiling.timer
-    def plotPredictionBoundry(binaryImg, leftLinePoints, rightLinePoints, margin):
+    def plotPredictionBoundry(binaryImg, leftLinePoints, rightLinePoints):
         """
         Plot the detected lane lines and lane area over a given image
 
         @param binaryImg: (np.2darray) result of search plotted over
         @param leftLinePoints: (tuple) lane lines points X, Y (np.ndarray)
         @param rightLinePoints: (tuple) lane lines points X, Y (np.ndarray)
-        @param margin: (int) lane line detection boundry width
 
         Returns
         =======
@@ -494,7 +493,7 @@ class Detector:
         if len(self.allRightParams) < 15:
             leftLinePoints, rightLinePoints = self.getLanePoints(binaryLanes)
         else:
-            leftLinePoints, rightLinePoints = self.predictLaneLines(binaryLanes, smoothThresh=15, margin=100)
+            leftLinePoints, rightLinePoints = self.predictLaneLines(binaryLanes, 100, smoothThresh=15)
      
         lane_max_height = binaryLanes.shape[0]
         leftLineParams, rightLineParams = Detector.fitLaneLines(leftLinePoints, rightLinePoints, order=2)    
@@ -502,7 +501,7 @@ class Detector:
         rightLinePoints = Detector.genLinePoints(rightLineParams, lane_max_height)
         self.setLaneXcPoint(leftLineParams, rightLineParams, 620)
         self.setCurveRadius(leftLinePoints, rightLinePoints, 620)
-        laneMask = Detector.plotPredictionBoundry(binaryLanes, leftLinePoints, rightLinePoints, margin=100)
+        laneMask = Detector.plotPredictionBoundry(binaryLanes, leftLinePoints, rightLinePoints)
         displayedFrame = self.applyLaneMasks(bgrFrame, laneMask)
      
         self.allLeftParams.append(leftLineParams)

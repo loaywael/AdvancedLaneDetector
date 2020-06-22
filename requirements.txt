@@ -16,7 +16,10 @@ grpcio==1.28.1
 h5py==2.10.0
 idna==2.9
 imageio==2.8.0
+imutils==0.5.3
 isort==4.3.21
+jax==0.1.67
+-e git+https://github.com/google/jax@912b28257d4a69582528eeff355850b082c2de33#egg=jaxlib&subdirectory=build
 joblib==0.14.1
 Keras-Preprocessing==1.1.0
 kiwisolver==1.2.0
@@ -50,12 +53,12 @@ scipy==1.4.1
 six==1.14.0
 tensorboard==2.2.1
 tensorboard-plugin-wit==1.6.0.post3
-tensorflow==2.2.0rc4
 tensorflow-estimator==2.2.0
+tensorflow-gpu==2.2.0rc4
 termcolor==1.1.0
 toml==0.10.1
-torch==1.5.0
-torchvision==0.6.0
+torch==1.5.0+cu101
+torchvision==0.6.0+cu101
 urllib3==1.25.9
 Werkzeug==1.0.1
 wrapt==1.12.1

@@ -2,28 +2,28 @@ from LaneDetector import Detector, Pipeline
 import argparse
 import time
 import cv2
-# import sys
+import sys
 import os
 
 
 def main(arg_vars):
     media_name = None
-    video_parser = argparse.ArgumentParser()
-    options_parser = argparse.ArgumentParser(parents=[video_parser])
+    # video_parser = argparse.ArgumentParser()
+    # options_parser = argparse.ArgumentParser(parents=[video_parser])
     # --------------------------------------------------------------
-    parser.add_argument(
-        "-m", "--media", required=True,
-        help="media path of the driving scene mp4/jpg"
-    )
-    # --------------------------------------------------------------
-    options_parser.add_argument(
-        "-s", "--save", required=True,
-        help="save the output rendered video"
-    )
-    options_parser.add_argument(
-        "-n", "--name", required=True,
-        help="name of the rendered video to be saved"
-    )
+    # parser.add_argument(
+    #     "-m", "--media", required=True,
+    #     help="media path of the driving scene mp4/jpg"
+    # )
+    # # --------------------------------------------------------------
+    # options_parser.add_argument(
+    #     "-s", "--save", required=True,
+    #     help="save the output rendered video"
+    # )
+    # options_parser.add_argument(
+    #     "-n", "--name", required=True,
+    #     help="name of the rendered video to be saved"
+    # )
     roiPoints = {
         # "topLeft"     : [ 568, 460],
         # "topRight"    : [ 717, 460],
@@ -35,7 +35,7 @@ def main(arg_vars):
         "bottomRight" : [ 1080, 680],
         "bottomLeft"  : [200, 680]
     }
-    vars(vid)
+    
     if len(arg_vars) == 1:
         media_path = arg_vars[0] 
     elif len(arg_vars) == 2:
@@ -50,18 +50,17 @@ def main(arg_vars):
     print("extension: ", media_extension)
     supported_imgs = ["jpg", "png", "jpeg"]
     supported_videos = ["mp4"]
-    detector = Pipeline(roiPoints, (1280, 720, 3))               
-    # detector = Detector(roiPoints, (1280, 720, 3))               
+    # detector = Pipeline(roiPoints, (1280, 720, 3))               
+    detector = Detector(roiPoints, (1280, 720, 3))               
 
     if media_extension in supported_imgs:
         img = cv2.imread(media_path)
-        # img = cv2.resize(img, None, fx=0.50, fy=0.50)
-        ###############################################
+        #############################
         detectedImg = detector(img)
+        #############################
         if media_name:
             print(media_name)
             cv2.imwrite("../assets/" + media_name, detectedImg)
-        ###############################################
         cv2.imshow("detection", detectedImg)
         cv2.waitKey(0)
 
@@ -77,9 +76,9 @@ def main(arg_vars):
             ret, frame = cap.read()
             if ret:
                 t1 = time.perf_counter()
-                ###############################################
+                #############################
                 detectedImg = detector(frame)
-                ###############################################
+                #############################
                 t2 = time.perf_counter()
                 cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (1100, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
