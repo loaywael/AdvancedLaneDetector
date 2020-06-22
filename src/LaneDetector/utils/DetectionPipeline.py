@@ -61,7 +61,7 @@ class Pipeline(Detector):
         if len(self.allRightParams) > 5:
             self.leftParams = np.mean(self.allLeftParams[-5::], axis=0)
             self.rightParams = np.mean(self.allRightParams[-5::], axis=0)
-
+   
 
     def __call__(self, X):
         undist_frame = cv2.undistort(X, self.camMtx, self.dstCoeffs, None, self.camMtx)
@@ -69,7 +69,7 @@ class Pipeline(Detector):
         dstImg1 = cv2.warpPerspective(displayedFrame, self.roi2birdTransMtx, (1280, 720))
         drawRoIPoly(displayedFrame, self.roiPoints)
 
-        binaryLanes = Detector.getLaneMask(dstImg1, 33, 175, 110, 30, 170)
+        binaryLanes = Pipeline.getLaneMask(dstImg1, 33, 175)
         dstImg2, self.leftPoints, self.rightPoints = self.getLanePoints(binaryLanes, visualize=True)
         self.leftParams, self.rightParams = self.fitLaneLines(self.leftPoints, self.rightPoints)
 

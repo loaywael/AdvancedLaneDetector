@@ -14,15 +14,15 @@ def main(arg_vars):
         # "bottomRight" : [1150, 666.],
         # "bottomLeft"  : [ 130, 666.]
         #-----------------------------
-        "topLeft"     : [ 568, 455],
-        "topRight"    : [ 717, 455],
-        "bottomRight" : [ 1043, 680],
-        "bottomLeft"  : [260, 680]
+        # "topLeft"     : [ 568, 460],
+        # "topRight"    : [ 717, 460],
+        # "bottomRight" : [ 1043, 680],
+        # "bottomLeft"  : [260, 680]
         #-----------------------------
-        # "topLeft"     : [ 546, 425],
-        # "topRight"    : [ -100, 680],
-        # "bottomRight" : [ 716, 425],
-        # "bottomLeft"  : [1380, 680]
+        "topLeft"     : [ 560, 460],
+        "topRight"    : [ 720, 460],
+        "bottomRight" : [ 1080, 680],
+        "bottomLeft"  : [200, 680]
     }
 
     if len(arg_vars) == 1:
@@ -39,8 +39,8 @@ def main(arg_vars):
     print("extension: ", media_extension)
     supported_imgs = ["jpg", "png", "jpeg"]
     supported_videos = ["mp4"]
-    # detector = Pipeline(roiPoints, (1280, 720, 3))               
-    detector = Detector(roiPoints, (1280, 720, 3))               
+    detector = Pipeline(roiPoints, (1280, 720, 3))               
+    # detector = Detector(roiPoints, (1280, 720, 3))               
 
     if media_extension in supported_imgs:
         img = cv2.imread(media_path)
@@ -65,11 +65,11 @@ def main(arg_vars):
         while True:
             ret, frame = cap.read()
             if ret:
-                t1 = time.time()
+                t1 = time.perf_counter()
                 ###############################################
                 detectedImg = detector(frame)
                 ###############################################
-                t2 = time.time()
+                t2 = time.perf_counter()
                 cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (1100, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
                 cv2.imshow("detection", detectedImg)

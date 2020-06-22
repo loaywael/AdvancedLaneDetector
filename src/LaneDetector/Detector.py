@@ -41,17 +41,16 @@ class Detector:
     applyLaneMasks(self, srcFrame, *masks)
     __call__(self, img)
     """
-    def __init__(self, roiPoints, frameShape, windowWidth=200, numWindows=9, threshold=33):
+    def __init__(self, roiPoints, frameShape, windowWidth=200, numWindows=13, threshold=33):
         """
         @param windowWidth: (int) window width (horizontal distance between diagonals)
         @param windowWidth: (int) number of windows allowed to be stacked on top of each other
         @param threshold: (int) minimum points to be considered as part of the lane
         """
-        self.nframes = 0
         self.roiPoints = []
         self.birdPoints = []
-        self.allLeftParams = Queue(15)
-        self.allRightParams = Queue(15)
+        self.allLeftParams = []#Queue(15)
+        self.allRightParams = []#Queue(15)
         self.path = "configs/"
         self.dstInMeter = 0
         self.laneMidPoint = None
@@ -106,8 +105,8 @@ class Detector:
             roiPoints["topRight"],
             roiPoints["bottomRight"]
         ])
-        self.birdPoints = np.float32([[250, 0], [250, 720], [1000, 0], [1000, 720]])
-        # self.birdPoints = np.float32([[100, 0], [100, 680], [1180, 0], [1180, 680]])
+        self.birdPoints = np.float32([[200, 0], [200, 720], [1000, 0], [1000, 720]])
+        # self.birdPoints = np.float32([[200, 0], [100, 680], [1180, 0], [1180, 680]])
 
         self.roi2birdTransMtx = cv2.getPerspectiveTransform(self.roiPoints, self.birdPoints)
         self.bird2roiTransMtx = cv2.getPerspectiveTransform(self.birdPoints, self.roiPoints)
@@ -119,7 +118,7 @@ class Detector:
         steerWheel = cv2.imread("../assets/steering_wheel.png")
         steerWheel = cv2.resize(steerWheel, None, fx=0.25, fy=0.25)
         steerWheelMask = cv2.cvtColor(steerWheel, cv2.COLOR_BGR2GRAY)
-        # steerWheelMask = cv2.medianBlur(steerWheelMask, 3)
+        steerWheelMask = cv2.medianBlur(steerWheelMask, 3)
         steerWheelMask = cv2.morphologyEx(steerWheelMask, cv2.MORPH_OPEN, kernel=np.ones((3, 3)))
         steerWheelMask = cv2.morphologyEx(steerWheelMask, cv2.MORPH_DILATE, kernel=np.ones((3, 3)))
         steerWheelMask = cv2.morphologyEx(steerWheelMask, cv2.MORPH_CLOSE, kernel=np.ones((3, 3)))
@@ -130,7 +129,7 @@ class Detector:
 
     @staticmethod
     # @profiling.timer
-    def getLaneMask(bgrFrame, minEdge, maxEdge, satThresh, hueThresh, redThresh):
+    def getLaneMask(bgrFrame, minEdge, maxEdge, satThresh=85, blueThresh=190):
         """
         Applies color bluring, thresholding and edge detection on a bgr image
         Returns lanes detected in a binary mask
@@ -149,14 +148,11 @@ class Detector:
         grayImg = cv2.cvtColor(bgrFrame, cv2.COLOR_BGR2GRAY)
         hlsImg = cv2.cvtColor(bgrFrame, cv2.COLOR_BGR2HLS)
         edgesMask = cv2.Canny(grayImg, minEdge, maxEdge)
-        _, satMask = cv2.threshold(hlsImg[:, :, 2], 175, 255, cv2.THRESH_BINARY)
-        _, hueMask = cv2.threshold(hlsImg[:, :, 2], 33, 255, cv2.THRESH_BINARY_INV)
-        _, redMask = cv2.threshold(bgrFrame[:, :, 2], 170, 255, cv2.THRESH_BINARY)
-        _, greenMask = cv2.threshold(bgrFrame[:, :, 1], 170, 255, cv2.THRESH_BINARY)
-        hueSatMask = cv2.bitwise_and(hueMask, satMask)
-        redGreenMask = cv2.bitwise_and(redMask, greenMask)
-        colorMask = cv2.bitwise_or(redGreenMask, hueSatMask)
+        _, blueMask = cv2.threshold(bgrFrame[:, :, 0], blueThresh, 255, cv2.THRESH_BINARY)
+        _, satMask = cv2.threshold(hlsImg[:, :, 2], satThresh, 255, cv2.THRESH_BINARY)
+        colorMask = cv2.bitwise_or(satMask, blueMask)
         outMask = cv2.bitwise_or(colorMask, edgesMask)
+        outMask = cv2.morphologyEx(outMask, cv2.MORPH_CLOSE, kernel=np.ones((3, 3)))
         return outMask
 
     def getInitialCenters(self, binaryImg):
@@ -300,8 +296,8 @@ class Detector:
         leftLinePoints: (tuple) left lane line points  (X, Y np.ndarray)
         rightLinePoints: (tuple) right lane line points (X, Y np.ndarray)
         """
-        rightLineParams = np.mean(self.allRightParams.queue, axis=0)
-        leftLineParams = np.mean(self.allLeftParams.queue, axis=0)
+        rightLineParams = np.mean(self.allRightParams[-smoothThresh::], axis=0)
+        leftLineParams = np.mean(self.allLeftParams[-smoothThresh::], axis=0)
 
         noneZeroIds = binaryImg.nonzero()
         noneZeroXIds = np.array(noneZeroIds[1])
@@ -451,36 +447,23 @@ class Detector:
         undist_frame = cv2.undistort(bgrFrame, self.camMtx, self.dstCoeffs, None, self.camMtx)
         # displayedFrame = undist_frame.copy()
         birdFrame = cv2.warpPerspective(undist_frame, self.roi2birdTransMtx, (1280, 720))
-        binaryLanes = Detector.getLaneMask(birdFrame, 33, 175, 110, 30, 170)
-        # cv2.imshow("debug", binaryLanes)
-        # cv2.waitKey(0)
+        binaryLanes = Detector.getLaneMask(birdFrame, 33, 175)
 
-
-        if self.nframes % 7 == 0 or self.nframes < 9:
+        if len(self.allRightParams) < 15:
             leftLinePoints, rightLinePoints = self.getLanePoints(binaryLanes)
-            if self.nframes > 9:
-                self.allLeftParams.get()
-                self.allRightParams.get()
-        else: #len(self.allRightParams) > 2:
-            self.allLeftParams.get()
-            self.allRightParams.get()
-            leftLinePoints, rightLinePoints = self.predictLaneLines(binaryLanes, smoothThresh=9, margin=100)
+        else:
+            leftLinePoints, rightLinePoints = self.predictLaneLines(binaryLanes, smoothThresh=15, margin=100)
      
         lane_max_height = binaryLanes.shape[0]
         leftLineParams, rightLineParams = Detector.fitLaneLines(leftLinePoints, rightLinePoints, order=2)    
         # self.getCurveRadius(670, leftLineParams, rightLineParams)
         leftLinePoints = Detector.genLinePoints(leftLineParams, lane_max_height)
         rightLinePoints = Detector.genLinePoints(rightLineParams, lane_max_height)
-        self.getCurveRadius(720, leftLinePoints, rightLinePoints)
-        self.setLaneXcPoint(leftLineParams, rightLineParams, 670)
+        self.getCurveRadius(620, leftLinePoints, rightLinePoints)
+        self.setLaneXcPoint(leftLineParams, rightLineParams, 620)
         laneMask = Detector.plotPredictionBoundry(binaryLanes, leftLinePoints, rightLinePoints, margin=100)
         displayedFrame = self.applyLaneMasks(bgrFrame, laneMask)
-        # print("frame index: ", self.nframes+1)
-        # print("size before: ", self.allRightParams.qsize())
-        self.allLeftParams.put_nowait(leftLineParams)
-        self.allRightParams.put_nowait(rightLineParams)
-        # print("size after: ", self.allRightParams.qsize())
-        # print("-"*50)
-        self.nframes += 1
-
+     
+        self.allLeftParams.append(leftLineParams)
+        self.allRightParams.append(rightLineParams)
         return displayedFrame
