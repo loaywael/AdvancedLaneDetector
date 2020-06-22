@@ -5,6 +5,7 @@ import cv2
 
 
 class Pipeline(Detector):
+    """ Visualizing the Detection pipeline """
     def __init__(self, *args, **kwargs):
         super(Pipeline, self).__init__(*args, **kwargs)
         self.rightPoints = None

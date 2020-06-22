@@ -2,18 +2,29 @@ from LaneDetector import Detector, Pipeline
 import argparse
 import time
 import cv2
-import sys
+# import sys
 import os
 
 
 def main(arg_vars):
     media_name = None
+    video_parser = argparse.ArgumentParser()
+    options_parser = argparse.ArgumentParser(parents=[video_parser])
+    # --------------------------------------------------------------
+    parser.add_argument(
+        "-m", "--media", required=True,
+        help="media path of the driving scene mp4/jpg"
+    )
+    # --------------------------------------------------------------
+    options_parser.add_argument(
+        "-s", "--save", required=True,
+        help="save the output rendered video"
+    )
+    options_parser.add_argument(
+        "-n", "--name", required=True,
+        help="name of the rendered video to be saved"
+    )
     roiPoints = {
-        # "topLeft"     : [ 475, 475.],
-        # "topRight"    : [ 805, 475.],
-        # "bottomRight" : [1150, 666.],
-        # "bottomLeft"  : [ 130, 666.]
-        #-----------------------------
         # "topLeft"     : [ 568, 460],
         # "topRight"    : [ 717, 460],
         # "bottomRight" : [ 1043, 680],
@@ -24,7 +35,7 @@ def main(arg_vars):
         "bottomRight" : [ 1080, 680],
         "bottomLeft"  : [200, 680]
     }
-
+    vars(vid)
     if len(arg_vars) == 1:
         media_path = arg_vars[0] 
     elif len(arg_vars) == 2:
