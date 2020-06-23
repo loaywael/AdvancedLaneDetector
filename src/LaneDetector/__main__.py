@@ -7,23 +7,6 @@ import os
 
 
 def main(arg_vars):
-    media_name = None
-    # video_parser = argparse.ArgumentParser()
-    # options_parser = argparse.ArgumentParser(parents=[video_parser])
-    # --------------------------------------------------------------
-    # parser.add_argument(
-    #     "-m", "--media", required=True,
-    #     help="media path of the driving scene mp4/jpg"
-    # )
-    # # --------------------------------------------------------------
-    # options_parser.add_argument(
-    #     "-s", "--save", required=True,
-    #     help="save the output rendered video"
-    # )
-    # options_parser.add_argument(
-    #     "-n", "--name", required=True,
-    #     help="name of the rendered video to be saved"
-    # )
     roiPoints = {
         # "topLeft"     : [ 568, 460],
         # "topRight"    : [ 717, 460],
@@ -35,17 +18,14 @@ def main(arg_vars):
         "bottomRight" : [ 1080, 680],
         "bottomLeft"  : [200, 680]
     }
-    
-    if len(arg_vars) == 1:
-        media_path = arg_vars[0] 
-    elif len(arg_vars) == 2:
-        media_path, media_name = arg_vars
-    else:
-        print("ERROR: invalid argument list")
-        print("|-----> please enter image, video path with supported arguments")
-        return
 
-    print("media", media_path)
+    media_path = arg_vars.path
+    print(">>> media", media_path)
+    if arg_vars.save:
+        output_name = arg_vars.name if arg_vars.name else "output_video.mp4"
+        save_path = "../assets/" + output_name
+        print(">>> output folder: ", save_path)
+
     media_extension = os.path.splitext(media_path)[-1][1:]
     print("extension: ", media_extension)
     supported_imgs = ["jpg", "png", "jpeg"]
@@ -58,9 +38,8 @@ def main(arg_vars):
         #############################
         detectedImg = detector(img)
         #############################
-        if media_name:
-            print(media_name)
-            cv2.imwrite("../assets/" + media_name, detectedImg)
+        if arg_vars.save:
+            cv2.imwrite(save_path, detectedImg)
         cv2.imshow("detection", detectedImg)
         cv2.waitKey(0)
 
@@ -69,9 +48,9 @@ def main(arg_vars):
         fps = int(cap.get(cv2.CAP_PROP_FPS))
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        if media_name:
+        if arg_vars.save:
             fourcc = 0x7634706d #cv2.VideoWriter_fourcc(*"MP4V")
-            vidWriter = cv2.VideoWriter("../assets/"+media_name, fourcc, fps, (width, height))
+            vidWriter = cv2.VideoWriter(save_path, fourcc, fps, (width, height))
         while True:
             ret, frame = cap.read()
             if ret:
@@ -83,7 +62,7 @@ def main(arg_vars):
                 cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (1100, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
                 cv2.imshow("detection", detectedImg)
-                if media_name:
+                if arg_vars.save:
                     vidWriter.write(detectedImg)
                 k = cv2.waitKey(1)
                 if k & 0xFF == ord('q'):
@@ -93,13 +72,28 @@ def main(arg_vars):
             else:
                 break
         cap.release()
-        if media_name:
+        if arg_vars.save:
             vidWriter.release()
-
     else:
         print("ERROR: this file is not supported!")
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    video_parser = argparse.ArgumentParser()
+    # --------------------------------------------------------------
+    video_parser.add_argument(
+        "-p", "--path", required=True, type=str, metavar="",
+        help="media path of the driving scene mp4/jpg"
+    )
+    video_parser.add_argument(
+        "-s", "--save", required=False, action="store_true",
+        help="save the output rendered video"
+    )
+    video_parser.add_argument(
+        "-n", "--name", required=False, type=str, metavar="",
+        help="name of the rendered video to be saved"
+    )
+    # --------------------------------------------------------------
+    args = video_parser.parse_args()
+    main(args)
     cv2.destroyAllWindows()
     
