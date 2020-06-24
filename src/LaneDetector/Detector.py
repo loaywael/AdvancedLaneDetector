@@ -116,7 +116,7 @@ class Detector:
             roiPoints["topRight"],
             roiPoints["bottomRight"]
         ])
-        self.birdPoints = np.float32([[200, 0], [200, 720], [1000, 0], [1000, 720]])
+        self.birdPoints = np.float32([[300, 0], [300, 720], [1000, 0], [1000, 720]])
         # self.birdPoints = np.float32([[200, 0], [100, 680], [1180, 0], [1180, 680]])
         self.roi2birdTransMtx = cv2.getPerspectiveTransform(self.roiPoints, self.birdPoints)
         self.bird2roiTransMtx = cv2.getPerspectiveTransform(self.birdPoints, self.roiPoints)

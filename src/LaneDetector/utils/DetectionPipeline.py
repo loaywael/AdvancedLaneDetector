@@ -95,7 +95,7 @@ class Pipeline(Detector):
         undist_frame = cv2.undistort(X, self.camMtx, self.dstCoeffs, None, self.camMtx)
         displayedFrame = undist_frame.copy()
         dstImg1 = cv2.warpPerspective(displayedFrame, self.roi2birdTransMtx, (1280, 720))
-        drawRoIPoly(displayedFrame, self.roiPoints)
+        # drawRoIPoly(displayedFrame, self.roiPoints)
 
         binaryLanes = Pipeline.getLaneMask(dstImg1, 33, 175)
         dstImg2, self.leftPoints, self.rightPoints = self.getLanePoints(binaryLanes, visualize=True)
@@ -105,4 +105,4 @@ class Pipeline(Detector):
         fullBoard = Pipeline.getPipeLineBoard(dstImg1, dstImg2, dstImg3, dstImg4, 0.5)
         detection = self.applyLaneMasks(X, dstImg2.astype("uint8"))
 
-        return displayedFrame#fullBoard
+        return dstImg1#fullBoard
