@@ -19,7 +19,7 @@ class Pipeline(Detector):
         self.rightPoints = self.genLinePoints(self.rightParams, 720)
         dstImg3 = self.plotFittedLines(srcImg, self.leftPoints, self.rightPoints)
         srcImg = coloredWarpedLanes.copy()
-        dstImg4 = self.plotPredictionBoundry(srcImg[:, :, 0], self.leftPoints, self.rightPoints, 50)
+        dstImg4 = Pipeline.plotPredictionBoundry(srcImg[:, :, 0], self.leftPoints, self.rightPoints)
         dstImg4 = cv2.addWeighted(srcImg, 1, dstImg4, 0.3, 0)
         # dstImg4 = srcImg.copy()
         return dstImg3, dstImg4
@@ -63,6 +63,31 @@ class Pipeline(Detector):
             self.leftParams = np.mean(self.allLeftParams[-5::], axis=0)
             self.rightParams = np.mean(self.allRightParams[-5::], axis=0)
    
+    def applyLaneMasks(self, srcFrame, mask):
+        """
+        Applies detected lane mask over source image to be displayed
+
+        @param srcFrame: (np.3darray) source image to be displayed
+        @masks: other masks to apply over the source image 
+
+        Returns
+        =======
+        displayedFrame: (np.3darray) detected frame to be displayed
+        """
+        # cv2.putText(srcFrame, f"Radius of curvature: {abs(int(self.curveRadiusInMeter))} (m)", (25, 50),
+        #         cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
+        # cv2.putText(srcFrame, f"Distance from camera center: {abs(int(self.dstInMeter*100))} (cm)", (25, 80),
+                # cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
+        laneMask = cv2.warpPerspective(mask, self.bird2roiTransMtx, (1280, 720))
+        ids = laneMask.nonzero()
+        x, y = np.array(ids[0]), np.array(ids[1]) 
+
+        srcFrame[x, y] = 0
+        displayedFrame = cv2.add(srcFrame,laneMask)
+        # self.plotLaneMarker(displayedFrame)
+        # self.plotSteeringWheel(displayedFrame)
+        return displayedFrame
+
 
     def __call__(self, X):
         undist_frame = cv2.undistort(X, self.camMtx, self.dstCoeffs, None, self.camMtx)
@@ -74,7 +99,8 @@ class Pipeline(Detector):
         dstImg2, self.leftPoints, self.rightPoints = self.getLanePoints(binaryLanes, visualize=True)
         self.leftParams, self.rightParams = self.fitLaneLines(self.leftPoints, self.rightPoints)
 
-        dstImg3, dstImg4 = self.colorfyLaneBoundry(dstImg2)
-        fullBoard = Pipeline.getPipeLineBoard(dstImg1, dstImg2, dstImg3, dstImg4, 0.5)
-  
-        return fullBoard
+        # dstImg3, dstImg4 = self.colorfyLaneBoundry(dstImg2)
+        # fullBoard = Pipeline.getPipeLineBoard(dstImg1, dstImg2, dstImg3, dstImg4, 0.5)
+        detection = self.applyLaneMasks(X, dstImg2.astype("uint8"))
+
+        return detection#fullBoard

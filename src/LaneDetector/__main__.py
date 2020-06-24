@@ -1,4 +1,5 @@
 from LaneDetector import Detector, Pipeline
+import threading
 import argparse
 import time
 import cv2
@@ -48,6 +49,8 @@ def main(arg_vars):
         fps = int(cap.get(cv2.CAP_PROP_FPS))
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        recording = False
+
         if arg_vars.save:
             fourcc = 0x7634706d #cv2.VideoWriter_fourcc(*"MP4V")
             vidWriter = cv2.VideoWriter(save_path, fourcc, fps, (width, height))
@@ -62,13 +65,19 @@ def main(arg_vars):
                 cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (1100, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
                 cv2.imshow("detection", detectedImg)
-                if arg_vars.save:
-                    vidWriter.write(detectedImg)
                 k = cv2.waitKey(1)
                 if k & 0xFF == ord('q'):
                     break
-                elif k == ord('p'):
+                elif k & 0xFF == ord('p'):
+                    recording = False
                     cv2.waitKey(0)
+                elif k & 0xFF == ord('r'): 
+                    if arg_vars.save:
+                        recording = True 
+                    else:
+                        print("ERROR: -s keyword argument should be given")
+                if recording:
+                    vidWriter.write(detectedImg)
             else:
                 break
         cap.release()

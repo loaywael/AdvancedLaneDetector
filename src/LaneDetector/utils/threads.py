@@ -1,5 +1,5 @@
 import cv2
-from threading import Thread
+from threading import Thread, Event
 from time import sleep
 
 
@@ -57,3 +57,17 @@ class ShowFrame:
 
 
 
+def delay(interval):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            stopped = threading.Event()
+            
+            def loop():
+                while not stopped.wait(interval):
+                    func(*a, **kwargs)
+            th = Thread(target=loop)
+            th.daemon = True
+            th.start()
+            return stopped
+        return wrapper
+    return decorator

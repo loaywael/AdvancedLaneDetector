@@ -1,6 +1,5 @@
 from LaneDetector.utils import profiling
 import numpy as np
-import imutils
 import pickle
 import cv2
 import os
@@ -312,6 +311,7 @@ class Detector:
         return (leftXPoints, leftYPoints), (rightXPoints, rightYPoints)
 
     # @profiling.timer
+    @staticmethod
     def fitLaneLines(leftLinePoints, rightLinePoints, order=2):
         """
         Fits lines to a given lane lines
