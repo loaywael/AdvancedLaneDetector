@@ -53,14 +53,9 @@ Detecting curved lane and computing radius of curvature
             <th align="center">warped image</th>
         </tr>
         <tr>
-            <td><img src="assets/processes/roi_points.jpg"></td>
-            <td><img src="assets/processes/birdPoints.jpg"</td>
+            <td><img src="assets/processes/roi_frame.jpg"></td>
+            <td><img src="assets/processes/bird_frame.jpg"</td>
         </tr>
-        <tr>
-            <td><img src="assets/processes/source_frame.jpg"></td>
-            <td><img src="assets/processes/warped_frame.jpg"</td>
-        </tr>
-        
     </table>
     
     3. ### extracting lanes binary mask (edge/color) thresholding
@@ -75,15 +70,49 @@ Detecting curved lane and computing radius of curvature
         </tr>
     </table>
     
-    4. ### applying sliding window algorithm locating lane points x, y coordinates
+    4. ### extracting initial coordinates of the lane center using histogram peaks
     <table style="table-layout: auto;">
         <tr>
-            <th align="center">warped image</th>
             <th align="center">binary image</th>
+            <th align="center">histogram peaks image</th>
+        </tr>
+        <tr>
+            <td><img src="assets/processes/pixels_histogram.jpg"></td>
+            <td><img src="assets/processes/histogram_peaks.jpg"</td>
+        </tr>
+    </table>
+    
+    5. ### applying sliding window algorithm locating lane points x, y coordinates
+    <table style="table-layout: auto;">
+        <tr>
+            <th align="center">binary image</th>
+            <th align="center">sliding window algorithm image</th>
         </tr>
         <tr>
             <td><img src="assets/processes/binary_frame.jpg"></td>
             <td><img src="assets/processes/sliding_window.gif"</td>
+        </tr>
+    </table>
+    
+    6. ### fitting 2nd-order polynomyal equation of the sliding window x, y coordinates 
+    <table style="table-layout: auto;">
+        <tr>
+            <th align="center">binary image</th>
+            <th align="center">histogram peaks image</th>
+        </tr>
+        <tr>
+            <td><img src="assets/processes/binary_frame.jpg"></td>
+            <td><img src="assets/processes/lane_boundry.jpg"</td>
+        </tr>
+    </table>
+    
+    7. ### calculating radius of curvature
+    <table style="table-layout: auto;">
+        <tr>
+            <th align="center">lane dimensions in meter</th>
+        </tr>
+        <tr>
+            <td><img src="assets/processes/dimensions_frame.jpg"></td>
         </tr>
     </table>
     
