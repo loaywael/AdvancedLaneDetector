@@ -29,9 +29,10 @@ def drawRoIPoly(img, points, size=9):
     @param img: (np.ndarray) BGR image
     @points: list of points of the Lane ROI
     """
-    for pt in points:
-        cv2.circle(img, tuple(pt), size, (0, 0, 255), -1)
-    cv2.polylines(img, [points.astype(np.int32)], True, (255, 0, 0), 2)
+    # for pt in points:
+    points = np.float32([points[0], points[2], points[3], points[1]])
+    #     cv2.circle(img, tuple(pt), size, (0, 0, 255), -1)
+    cv2.polylines(img, [points.astype(np.int32)], True, (0, 255, 0), 2)
     return img
 
 

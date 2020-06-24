@@ -22,9 +22,9 @@ def main(arg_vars):
 
     media_path = arg_vars.path
     print(">>> media", media_path)
+    save_path = "../assets/"
     if arg_vars.save:
         output_name = arg_vars.name if arg_vars.name else "output_video.mp4"
-        save_path = "../assets/" + output_name
         print(">>> output folder: ", save_path)
 
     media_extension = os.path.splitext(media_path)[-1][1:]
@@ -40,7 +40,7 @@ def main(arg_vars):
         detectedImg = detector(img)
         #############################
         if arg_vars.save:
-            cv2.imwrite(save_path, detectedImg)
+            cv2.imwrite(save_path+output_name, detectedImg)
         cv2.imshow("detection", detectedImg)
         cv2.waitKey(0)
 
@@ -53,7 +53,7 @@ def main(arg_vars):
 
         if arg_vars.save:
             fourcc = 0x7634706d #cv2.VideoWriter_fourcc(*"MP4V")
-            vidWriter = cv2.VideoWriter(save_path, fourcc, fps, (width, height))
+            vidWriter = cv2.VideoWriter(save_path+output_name, fourcc, fps, (width, height))
         while True:
             ret, frame = cap.read()
             if ret:
@@ -70,7 +70,9 @@ def main(arg_vars):
                     break
                 elif k & 0xFF == ord('p'):
                     recording = False
-                    cv2.waitKey(0)
+                    k = cv2.waitKey(0)
+                    if k & 0xFF == ord("s"):
+                        cv2.imwrite(save_path+"screenshot_1.jpg", detectedImg)
                 elif k & 0xFF == ord('r'): 
                     if arg_vars.save:
                         recording = True 

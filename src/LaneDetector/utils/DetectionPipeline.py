@@ -88,19 +88,21 @@ class Pipeline(Detector):
         # self.plotSteeringWheel(displayedFrame)
         return displayedFrame
 
+    # def __del__(self):
+    #     self.vidWriter.release()
 
     def __call__(self, X):
         undist_frame = cv2.undistort(X, self.camMtx, self.dstCoeffs, None, self.camMtx)
         displayedFrame = undist_frame.copy()
         dstImg1 = cv2.warpPerspective(displayedFrame, self.roi2birdTransMtx, (1280, 720))
-        drawRoIPoly(displayedFrame, self.roiPoints)
+        # drawRoIPoly(displayedFrame, self.birdPoints)
 
         binaryLanes = Pipeline.getLaneMask(dstImg1, 33, 175)
         dstImg2, self.leftPoints, self.rightPoints = self.getLanePoints(binaryLanes, visualize=True)
         self.leftParams, self.rightParams = self.fitLaneLines(self.leftPoints, self.rightPoints)
 
-        # dstImg3, dstImg4 = self.colorfyLaneBoundry(dstImg2)
-        # fullBoard = Pipeline.getPipeLineBoard(dstImg1, dstImg2, dstImg3, dstImg4, 0.5)
+        dstImg3, dstImg4 = self.colorfyLaneBoundry(dstImg2)
+        fullBoard = Pipeline.getPipeLineBoard(dstImg1, dstImg2, dstImg3, dstImg4, 0.5)
         detection = self.applyLaneMasks(X, dstImg2.astype("uint8"))
 
-        return detection#fullBoard
+        return dstImg4#fullBoard

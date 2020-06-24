@@ -82,8 +82,7 @@ class Detector:
         self.dstCoeffs = self.camModel["dstCoeffs"]
         self.camMtx = self.camModel["camMtx"]
         self.setWarpMatrices(roiPoints)
-        
-    
+
     @staticmethod
     def save2File(path, obj):
         """
@@ -248,8 +247,7 @@ class Detector:
             
             if visualize:
                 cv2.rectangle(scanedImg, leftLinePt1, leftLinePt2, (0, 255, 0), 3)
-                cv2.rectangle(scanedImg, rightLinePt1, rightLinePt2, (0, 255, 0), 3)
-                
+                cv2.rectangle(scanedImg, rightLinePt1, rightLinePt2, (0, 255, 0), 3)                
 
         leftLanePixelsIds = np.sum(np.array(leftLanePixelsIds), axis=0).astype("bool")
         rightLanePixelsIds = np.sum(np.array(rightLanePixelsIds), axis=0).astype("bool")
