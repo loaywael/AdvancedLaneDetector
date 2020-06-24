@@ -162,8 +162,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
 > Thanks for these references I was able to get over problems I've faced during implementation.   
 >   
 >   PyData Webinar by Ross Kippenbrock   
-    https://www.youtube.com/watch?v=VyLihutdsPk   
-    
+>    https://www.youtube.com/watch?v=VyLihutdsPk    
+>    
 >    Udacity open dataset    
 >    https://github.com/udacity/CarND-Advanced-Lane-Lines   
 >   
