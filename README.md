@@ -6,6 +6,19 @@ Detecting curved lane and computing radius of curvature
     > Applying what I have learned in classical computer vision to build something useful   
     > that let me breakthrough self driving technology.   
  
+</br></br></br>   
+<h3 align=center>Project Demo</h3>
+<img align="middle" src="assets/project_demo.gif" alt="lane detected in green" style="width: 100%;"/>
+<table><tr>
+<td><img src="assets/pipeline_demo.gif" alt="lane detected in green" style="width: 250px;"/></td>
+<td><img src="assets/pipeline2_demo.gif" alt="lane detected in green" style="width: 250px;"/></td>
+</tr></table>
+<table><tr>
+<td><img src="assets/test1.png" alt="lane detected in green" style="width: 250px;"/></td>
+<td><img src="assets/test2.png" alt="lane detected in green" style="width: 250px;"/></td>
+</tr></table>
+</br></br>
+
 - ## Project Objectives:
     - [x] Calibrating and undistorting the camera model used to shoot the project dataset
     - [x] Extracting lanes binary mask using color/edge thresholding 
@@ -44,21 +57,8 @@ Detecting curved lane and computing radius of curvature
     ```bash  
     $ cd ./src     
     $ python -m LaneDetector ../data/driving_datasets/project_video.mp4   
-    ```
-
-    </br></br></br>   
-    <h3 align=center>Project Demo</h3>
-    <img align="middle" src="assets/project_demo.gif" alt="lane detected in green" style="width: 100%;"/>
-    <table><tr>
-    <td><img src="assets/pipeline_demo.gif" alt="lane detected in green" style="width: 250px;"/></td>
-    <td><img src="assets/pipeline2_demo.gif" alt="lane detected in green" style="width: 250px;"/></td>
-    </tr></table>
-    <table><tr>
-    <td><img src="assets/test1.png" alt="lane detected in green" style="width: 250px;"/></td>
-    <td><img src="assets/test2.png" alt="lane detected in green" style="width: 250px;"/></td>
-    </tr></table>
-    </br></br>
-   
+    ```    
+    
 ***
 
 # REFERENCES
