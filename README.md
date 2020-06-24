@@ -6,17 +6,21 @@ Detecting curved lane and computing radius of curvature
     > Applying what I have learned in classical computer vision to build something useful   
     > that let me breakthrough self driving technology.   
  
-</br></br></br>   
+</br></br>
 <h3 align=center>Project Demo</h3>
 <img align="middle" src="assets/project_demo.gif" alt="lane detected in green" style="width: 100%;"/>
-<table><tr>
-<td><img src="assets/pipeline_demo.gif" alt="lane detected in green" style="width: 250px;"/></td>
-<td><img src="assets/pipeline2_demo.gif" alt="lane detected in green" style="width: 250px;"/></td>
-</tr></table>
-<table><tr>
-<td><img src="assets/test1.png" alt="lane detected in green" style="width: 250px;"/></td>
-<td><img src="assets/test2.png" alt="lane detected in green" style="width: 250px;"/></td>
-</tr></table>
+<table>
+    <tr>
+        <td><img src="assets/pipeline_demo.gif" alt="lane detected in green" style="width: 250px;"/></td>
+        <td><img src="assets/pipeline2_demo.gif" alt="lane detected in green" style="width: 250px;"/></td>
+    </tr>
+</table>
+<table>
+    <tr>
+        <td><img src="assets/test1.png" alt="lane detected in green" style="width: 250px;"/></td>
+        <td><img src="assets/test2.png" alt="lane detected in green" style="width: 250px;"/></td>
+    </tr>
+</table>
 </br></br>
 
 - ## Project Objectives:
@@ -32,6 +36,57 @@ Detecting curved lane and computing radius of curvature
     - [x] Run in realtime for videos: Analyze more than 15 **`FPS`**
 
 
+- ## Processes Analysis
+    This section will briefly explain how the algorithim works step by step
+    
+    1. ### Undistorting camera model
+    <table>
+        <tr>
+            <td><img src="assets/processes/undistortion.png"></td>
+        </tr>
+    </table>
+    
+    2. ### warping Region of Interest (ROI) to bird view
+    <table style="table-layout: auto;">
+        <tr>
+            <th align="center">source image</th>
+            <th align="center">warped image</th>
+        </tr>
+        <tr>
+            <td><img src="assets/processes/roi_points.jpg"></td>
+            <td><img src="assets/processes/birdPoints.jpg"</td>
+        </tr>
+        <tr>
+            <td><img src="assets/processes/source_frame.jpg"></td>
+            <td><img src="assets/processes/warped_frame.jpg"</td>
+        </tr>
+        
+    </table>
+    
+    3. ### extracting lanes binary mask (edge/color) thresholding
+    <table style="table-layout: auto;">
+        <tr>
+            <th align="center">warped image</th>
+            <th align="center">binary image</th>
+        </tr>
+        <tr>
+            <td><img src="assets/processes/warped_frame.jpg"></td>
+            <td><img src="assets/processes/binary_frame.jpg"</td>
+        </tr>
+    </table>
+    
+    4. ### applying sliding window algorithm locating lane points x, y coordinates
+    <table style="table-layout: auto;">
+        <tr>
+            <th align="center">warped image</th>
+            <th align="center">binary image</th>
+        </tr>
+        <tr>
+            <td><img src="assets/processes/binary_frame.jpg"></td>
+            <td><img src="assets/processes/sliding_window.gif"</td>
+        </tr>
+    </table>
+    
 - ## Project Setup and Requirements   
     **`use python3.5`** or newer versions to install and run the package  
     ```bash
