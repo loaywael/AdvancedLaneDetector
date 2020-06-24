@@ -31,8 +31,8 @@ def main(arg_vars):
     print("extension: ", media_extension)
     supported_imgs = ["jpg", "png", "jpeg"]
     supported_videos = ["mp4"]
-    detector = Pipeline(roiPoints, (1280, 720, 3))               
-    # detector = Detector(roiPoints, (1280, 720, 3))               
+    # detector = Pipeline(roiPoints, (1280, 720, 3))               
+    detector = Detector(roiPoints, (1280, 720, 3))               
 
     if media_extension in supported_imgs:
         img = cv2.imread(media_path)
