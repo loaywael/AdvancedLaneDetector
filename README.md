@@ -150,8 +150,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
 ***
 
 - ## System Constraints
- - sensitive to shadows and high lumminant environments
- - sensitive to bad weather conditions
+  - sensitive to shadows and high lumminant environments
+  - sensitive to bad weather conditions
 
 - ## Future Work
     using Deep learning semantic segmentation to build more robust algorithm that stands out in hard weather conditions
