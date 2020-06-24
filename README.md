@@ -101,7 +101,7 @@ Detecting curved lane and computing radius of curvature
             <th align="center">histogram peaks image</th>
         </tr>
         <tr>
-            <td><img src="assets/processes/binary_frame.jpg"></td>
+            <td><img src="assets/processes/scaned_frame.jpg"></td>
             <td><img src="assets/processes/lane_boundry.jpg"</td>
         </tr>
     </table>
