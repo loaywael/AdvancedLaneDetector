@@ -2,7 +2,7 @@
 
 Providing brief gentle inputs to the steering wheel to help avoid drifting out of your lane unintentionally
  by detecting lane lines and estimating car offset from center then computing radius of curvature using a forward looking camera
- it doesn't mean it is continuously steering the vehicle in the center of the lane i.e. the driver should always steer the vehicle manually.
+ it doesn't mean it is continuously steering the vehicle in the center of the lane i.e. the driver should always steer the vehicle manually.   
  The brief inputs from the system only meant to guide the driver back into the lane.
  
     
@@ -150,10 +150,10 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
 ***
 
 - ## System Constraints
-  - sensitive to shadows and high lumminant environments
-  - sensitive to bad weather conditions
-
-- ## Future Work
+  - sensitive to shadows and high luminant environments
+  - ssensitive to bad weather conditions    
+  
+- ## Future Work   
     using Deep learning semantic segmentation to build more robust algorithm that stands out in hard weather conditions
 ***
     
