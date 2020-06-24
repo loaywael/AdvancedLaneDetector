@@ -14,8 +14,8 @@ def main(arg_vars):
         # "bottomRight" : [ 1043, 680],
         # "bottomLeft"  : [260, 680]
         #-----------------------------
-        "topLeft"     : [ 560, 460],
-        "topRight"    : [ 720, 460],
+        "topLeft"     : [ 560, 455],
+        "topRight"    : [ 720, 455],
         "bottomRight" : [ 1080, 680],
         "bottomLeft"  : [200, 680]
     }
@@ -62,8 +62,8 @@ def main(arg_vars):
                 detectedImg = detector(frame)
                 #############################
                 t2 = time.perf_counter()
-                cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (1100, 50),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
+                # cv2.putText(detectedImg, f"FPS: {int(1.0/(t2-t1))}", (1100, 50),
+                #     cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 15), 1, cv2.LINE_AA)
                 cv2.imshow("detection", detectedImg)
                 k = cv2.waitKey(1)
                 if k & 0xFF == ord('q'):
