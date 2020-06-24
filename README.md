@@ -1,7 +1,11 @@
-# AdvancedLaneDetector
-Detecting curved lane and computing radius of curvature   
+# Lane Keeping Assist
 
-
+Providing brief gentle inputs to the steering wheel to help avoid drifting out of your lane unintentionally
+ by detecting lane lines and estimating car offset from center then computing radius of curvature using a forward looking camera
+ it doesn't mean it is continuously steering the vehicle in the center of the lane i.e. the driver should always steer the vehicle manually.
+ The brief inputs from the system only meant to guide the driver back into the lane.
+ 
+    
 - ## Project Goal   
     > Applying what I have learned in classical computer vision to build something useful   
     > that let me breakthrough self driving technology.   
@@ -145,14 +149,32 @@ Detecting curved lane and computing radius of curvature
     
 ***
 
+- ## System Constraints
+ - sensitive to shadows and high lumminant environments
+ - sensitive to bad weather conditions
+
+- ## Future Work
+    using Deep learning semantic segmentation to build more robust algorithm that stands out in hard weather conditions
+***
+    
 # REFERENCES
 
 > Thanks for these references I was able to get over problems I've faced during implementation.   
 >   
->    PyData Webinar by Ross Kippenbrock   
+>   PyData Webinar by Ross Kippenbrock   
     https://www.youtube.com/watch?v=VyLihutdsPk   
-    Udacity open dataset    
-    https://github.com/udacity/CarND-Advanced-Lane-Lines
+    
+>    Udacity open dataset    
+>    https://github.com/udacity/CarND-Advanced-Lane-Lines   
+>   
+>   Lane Keeping Assist    
+>    https://www.youtube.com/watch?v=r8G0n5LeJo0    
+>   https://topclassactions.com/lawsuit-settlements/consumer-products/auto-news/what-is-lane-keep-assist/    
+>
+>    Lane Dimensions standards    
+>    http://www.ctp.gov.in/RoadMarkings.htm   
+    
+    
 
 
 
