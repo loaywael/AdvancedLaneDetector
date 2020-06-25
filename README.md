@@ -36,6 +36,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     - [x] Plot polygon filling the region between the left/right lanes
     - [x] Run in realtime for videos: Analyze more than 15 **`FPS`**
 
+</br></br>   
 
 - ## Processes Analysis
     This section will briefly explain how the algorithim works step by step
@@ -55,7 +56,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
                 <td><img src="https://www.mathworks.com/help/vision/ug/calibration_camera_matrix.png"></td>
             </tr>
         </table>
-       
+        </br>   
+        
        **Calibration Methods**   
            - Frist Method: Requires knowing something about the object in the real world 3D-space by satisfying one of:
               - Vanishing Points, 
@@ -88,7 +90,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
            2. External parameters : This refers to the orientation (rotation and translation) of the camera with respect to some world coordinate system.  
            
           **Approach**   
-           =========
+           =======    
            Using Chessboard images of different size and view angle, then using corner detector to locate corner points of the board
            that are given as the input and the return is the calibrated camera matrix which will be use to undistort any other image.
            
@@ -98,7 +100,10 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             </tr>
         </table>
     
-    2. ### warping Region of Interest (ROI) to bird view
+    2. ### warping Region of Interest (ROI) to bird view   
+    In order to fit a curve that represent the lane lines the lines should appear parallel in the image plane   
+    to achieve prospective projection is applied to warp the prespective view to a bird view that visualizes parallel lines parallel.   
+    
     <table style="table-layout: auto;">
         <tr>
             <th align="center">Source Image</th>
@@ -110,7 +115,10 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
         </tr>
     </table>
     
-    3. ### extracting lanes binary mask (edge/color) thresholding
+    3. ### extracting lanes binary mask (edge/color) thresholding   
+    Blocking out any details in the image except the lane lines by thresholding Saturation, and Blue color channels   
+    then combining the result with edge detector and using that mask to be scanned to extract lane line x, y coordinates.   
+    
     <table style="table-layout: auto;">
         <tr>
             <th align="center">Warped Image</th>
@@ -122,7 +130,10 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
         </tr>
     </table>
     
-    4. ### extracting initial coordinates of the lane center using histogram peaks
+    4. ### extracting initial coordinates of the lane center using histogram peaks   
+    Computing pixels histogram along the x-axis for the bottom half of the image where the lanes should be found    
+    using the maximum peaks of the histogram as the initial location of the center of the lane lines.   
+    
     <table style="table-layout: auto;">
         <tr>
             <th align="center">Binary Image</th>
@@ -134,7 +145,10 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
         </tr>
     </table>
     
-    5. ### applying sliding window algorithm locating lane points x, y coordinates
+    5. ### applying sliding window algorithm locating lane points x, y coordinates   
+    Sliding a fixed size window starting from the initial centers computed from step-4 that computes the mean of all pixels
+    within the current window position and append the current window location to lane line coordinates only if the mean > given pixel value threshold.   
+    
     <table style="table-layout: auto;">
         <tr>
             <th align="center">Binary Image</th>
@@ -146,7 +160,9 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
         </tr>
     </table>
     
-    6. ### fitting 2nd-order polynomyal equation of the sliding window x, y coordinates 
+    6. ### fitting 2nd-order polynomyal equation of the sliding window x, y coordinates   
+    Using 2nd order regression to fit the lane line curve that marks the lane left and right boundries.   
+    
     <table style="table-layout: auto;">
         <tr>
             <th align="center">Scaned Image</th>
@@ -158,7 +174,12 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
         </tr>
     </table>
     
-    7. ### calculating radius of curvature
+    7. ### calculating radius of curvature   
+    Radius of curvature is obtained by the formula:    
+    
+      $$ R = {(1 + (2AY + B)^2)^{3\over2}\over|2A|}$$    
+    Y values are in pixels to map the radius from pixels to meters it is multiplied by $$px2meter = {30\over720}$$
+
     <table style="table-layout: auto;">
         <tr>
             <th align="center">Lane Dimensions in meter</th>
