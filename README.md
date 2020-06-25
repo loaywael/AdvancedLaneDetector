@@ -56,7 +56,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             </tr>
         </table>
        
-       **Calibration Methods**
+       **Calibration Methods**   
            - Frist Method: Requires knowing something about the object in the real world 3D-space by satisfying one of:
               - Vanishing Points, 
               - 2D planar known object
@@ -69,7 +69,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
           This project uses the second method
 
        
-       **Image Distortion**: 
+       **Image Distortion**:    
             - Radial Distortion Bended Edges: Due to camera lens light rays often bend too much, or little at the edges
             - Tangential Distortion Stretched Image: When camera not aligned parallel to objects
             - Both Radial and Tangential Distortions
@@ -81,7 +81,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
          ======
              - Affects apparent size, and shape of objects
              
-         **Camera Model Calibration**
+         **Camera Model Calibration**   
            having all the information (parameters or coefficients) about the camera required to determine an accurate relationship between a 3D point in the real            world and its corresponding 2D projection (pixel) in the image captured by that calibrated camera.   
          
            1. Internal parameters of the camera/lens system. E.g. focal length, optical center, and radial distortion coefficients of the lens.   
