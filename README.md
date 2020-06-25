@@ -59,17 +59,15 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
         </br>   
         
        **Calibration Methods**   
-           - Frist Method: Requires knowing something about the object in the real world 3D-space by satisfying one of:
-              - Vanishing Points, 
-              - 2D planar known object
-              - 3D object with known shape and size
-           - Second Method: Assumes no known object in 3D-space
-              - Taking multiple views with differnt angles and positions of a specific scene like 8x8 Chessboard   
+           - Frist Method: Requires knowing something about the object in the real world 3D-space by satisfying one of:   
+              - Vanishing Points   
+              - 2D planar known object   
+              - 3D object with known shape and size   
+           - Second Method: Assumes no known object in 3D-space   
+              - Taking multiple views with differnt angles and positions of a specific scene like 8x8 Chessboard    
               - Computing the relative camera rotation and translation by using undo adjustment it tweaks at least 8 2D points for all views   
                 and compare them in all the views leading to estimate the 3D scene structure.   
           
-          This project uses the second method
-
        
        **Image Distortion**:    
             - Radial Distortion Bended Edges: Due to camera lens light rays often bend too much, or little at the edges
@@ -77,11 +75,11 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             - Both Radial and Tangential Distortions
             
          - Pros   
-         ======
-             - Becomes usefull for capturing wide angle fish eye scene
-         - Cons   
-         ======
-             - Affects apparent size, and shape of objects
+         ======   
+             - Becomes usefull for capturing wide angle fish eye scene   
+         - Cons    
+         ======   
+             - Affects apparent size, and shape of objects   
              
          **Camera Model Calibration**   
            having all the information (parameters or coefficients) about the camera required to determine an accurate relationship between a 3D point in the real            world and its corresponding 2D projection (pixel) in the image captured by that calibrated camera.   
@@ -92,7 +90,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
           **Approach**   
            =======    
            Using Chessboard images of different size and view angle, then using corner detector to locate corner points of the board
-           that are given as the input and the return is the calibrated camera matrix which will be use to undistort any other image.
+           that are given as the input and the return is the calibrated camera matrix which will be use to undistort any other image.   
            
         <table>
             <tr>
@@ -113,7 +111,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             <td><img src="assets/processes/roi_frame.jpg"></td>
             <td><img src="assets/processes/bird_frame.jpg"</td>
         </tr>
-    </table>
+    </table>    
     
     3. ### extracting lanes binary mask (edge/color) thresholding   
     Blocking out any details in the image except the lane lines by thresholding Saturation, and Blue color channels   
@@ -128,7 +126,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             <td><img src="assets/processes/warped_frame.jpg"></td>
             <td><img src="assets/processes/binary_frame.jpg"</td>
         </tr>
-    </table>
+    </table>   
     
     4. ### extracting initial coordinates of the lane center using histogram peaks   
     Computing pixels histogram along the x-axis for the bottom half of the image where the lanes should be found    
@@ -143,7 +141,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             <td><img src="assets/processes/pixels_histogram.jpg"></td>
             <td><img src="assets/processes/histogram_peaks.jpg"</td>
         </tr>
-    </table>
+    </table>   
     
     5. ### applying sliding window algorithm locating lane points x, y coordinates   
     Sliding a fixed size window starting from the initial centers computed from step-4 that computes the mean of all pixels
@@ -158,7 +156,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             <td><img src="assets/processes/binary_frame.jpg"></td>
             <td><img src="assets/processes/sliding_window.gif"</td>
         </tr>
-    </table>
+    </table>   
     
     6. ### fitting 2nd-order polynomyal equation of the sliding window x, y coordinates   
     Using 2nd order regression to fit the lane line curve that marks the lane left and right boundries.   
@@ -172,7 +170,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             <td><img src="assets/processes/scaned_frame.jpg"></td>
             <td><img src="assets/processes/lane_boundry.jpg"</td>
         </tr>
-    </table>
+    </table>   
     
     7. ### calculating radius of curvature   
     Radius of curvature is obtained by the formula:    
@@ -187,7 +185,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
         <tr>
             <td><img src="assets/processes/dimensions_frame.jpg"></td>
         </tr>
-    </table>
+    </table>   
     
 - ## Project Setup and Requirements   
     **`use python3.5`** or newer versions to install and run the package  
