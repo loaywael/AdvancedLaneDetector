@@ -60,12 +60,12 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
         
        **Calibration Methods**   
            - Frist Method: Requires knowing something about the object in the real world 3D-space by satisfying one of:   
-              - Vanishing Points   
-              - 2D planar known object   
-              - 3D object with known shape and size   
+                - Vanishing Points   
+                - 2D planar known object   
+                - 3D object with known shape and size   
            - Second Method: Assumes no known object in 3D-space   
-              - Taking multiple views with differnt angles and positions of a specific scene like 8x8 Chessboard    
-              - Computing the relative camera rotation and translation by using undo adjustment it tweaks at least 8 2D points for all views   
+                - Taking multiple views with differnt angles and positions of a specific scene like 8x8 Chessboard    
+                - Computing the relative camera rotation and translation by using undo adjustment it tweaks at least 8 2D points for all views   
                 and compare them in all the views leading to estimate the 3D scene structure.   
           
        
@@ -175,7 +175,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     7. ### calculating radius of curvature   
     Radius of curvature is obtained by the formula:    
     
-      $$ R = {(1 + (2AY + B)^2)^{3\over2}\over|2A|}$$    
+    $R = {(1 + (2AY + B)^2)^{3\over2}\over|2A|}$       
     Y values are in pixels to map the radius from pixels to meters it is multiplied by $$px2meter = {30\over720}$$
 
     <table style="table-layout: auto;">
