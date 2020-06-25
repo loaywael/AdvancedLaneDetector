@@ -46,10 +46,10 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             - Tangential Distortion Stretched Image: When camera not aligned parallel to objects
             - Both Radial and Tangential Distortions
             
-         Pros
+         - Pros
          ====
              - Becomes usefull for capturing wide angle fish eye scene
-         Cons
+         - Cons
          ====
              - Affects apparent size, and shape of objects
              
