@@ -1,9 +1,6 @@
 # Lane Keeping Assist
 
-Providing brief gentle inputs to the steering wheel to help avoid drifting out of your lane unintentionally
- by detecting lane lines and estimating car offset from center then computing radius of curvature using a forward looking camera.   
- It doesn't mean it is continuously steering the vehicle in the center of the lane i.e. the driver should always steer the vehicle manually.   
- The brief inputs from the system only meant to warn and guide the driver back into the lane.
+Providing brief gentle inputs to the steering wheel to help avoid drifting out of your lane unintentionally by detecting lane lines and estimating car offset from center then computing radius of curvature using a forward looking camera. It doesn't mean it is continuously steering the vehicle in the center of the lane i.e. the driver should always steer the vehicle manually. The brief inputs from the system only meant to warn and guide the driver back into the lane.
  
     
 - ## Project Goal   
@@ -44,6 +41,24 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     This section will briefly explain how the algorithim works step by step
     
     1. ### Undistorting camera model
+       **Image Distortion**: 
+            - Radial Distortion Bended Edges: Due to camera lenses light rays often bend too much, or little at the edges
+            - Tangential Distortion Stretched Image: When camera not aligned parallel to objects
+            - Both Radial and Tangential Distortions
+            
+         Pros
+         ====
+             - Becomes usefull for capturing wide angle fish eye scene
+         Cons
+         ====
+             - Affects apparent size, and shape of objects
+             
+         **Camera Model Calibration**
+           having all the information (parameters or coefficients) about the camera required to determine an accurate relationship between a 3D point in the real            world and its corresponding 2D projection (pixel) in the image captured by that calibrated camera.   
+         
+           1. Internal parameters of the camera/lens system. E.g. focal length, optical center, and radial distortion coefficients of the lens.   
+           2. External parameters : This refers to the orientation (rotation and translation) of the camera with respect to some world coordinate system.  
+           
     <table>
         <tr>
             <td><img src="assets/processes/undistortion.png"></td>
@@ -146,7 +161,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
 
     ```bash  
     $ cd ./src     
-    $ python -m LaneDetector ../data/driving_datasets/project_video.mp4   
+    $ python -m LaneDetector -p ../data/driving_datasets/project_video.mp4   
     ```    
     
 ***
@@ -171,10 +186,19 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
 >   
 >   Lane Keeping Assist    
 >    https://www.youtube.com/watch?v=r8G0n5LeJo0    
->   https://topclassactions.com/lawsuit-settlements/consumer-products/auto-news/what-is-lane-keep-assist/    
+>    https://topclassactions.com/lawsuit-settlements/consumer-products/auto-news/what-is-lane-keep-assist/    
 >
 >    Lane Dimensions Standards    
 >    http://www.ctp.gov.in/RoadMarkings.htm   
+> 
+>    Image Formation - Pinhole Camera Model
+>    https://www.youtube.com/watch?v=nOQvjG7Jbao   
+>
+>    Camera Model Calibration
+>    https://www.learnopencv.com/camera-calibration-using-opencv/
+>
+>    Perspective projection
+>    https://www.youtube.com/watch?v=17kqhGRDHc8
     
     
 
