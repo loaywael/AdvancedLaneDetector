@@ -1,14 +1,14 @@
 # Lane Keeping Assist
 
 Providing brief gentle inputs to the steering wheel to help avoid drifting out of your lane unintentionally
- by detecting lane lines and estimating car offset from center then computing radius of curvature using a forward looking camera
- it doesn't mean it is continuously steering the vehicle in the center of the lane i.e. the driver should always steer the vehicle manually.   
- The brief inputs from the system only meant to guide the driver back into the lane.
+ by detecting lane lines and estimating car offset from center then computing radius of curvature using a forward looking camera.   
+ It doesn't mean it is continuously steering the vehicle in the center of the lane i.e. the driver should always steer the vehicle manually.   
+ The brief inputs from the system only meant to warn and guide the driver back into the lane.
  
     
 - ## Project Goal   
-    > Applying what I have learned in classical computer vision to build something useful   
-    > that let me breakthrough self driving technology.   
+    > Developing softwar solution that serves level-1 of autonomy `lateral control` for self driving cars.   
+    > The project is for educational purposes that involves applying classical computer vision and machine learning.   
  
 </br></br>
 <h3 align=center>Project Demo</h3>
@@ -53,8 +53,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     2. ### warping Region of Interest (ROI) to bird view
     <table style="table-layout: auto;">
         <tr>
-            <th align="center">source image</th>
-            <th align="center">warped image</th>
+            <th align="center">Source Image</th>
+            <th align="center">Warped Image</th>
         </tr>
         <tr>
             <td><img src="assets/processes/roi_frame.jpg"></td>
@@ -65,8 +65,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     3. ### extracting lanes binary mask (edge/color) thresholding
     <table style="table-layout: auto;">
         <tr>
-            <th align="center">warped image</th>
-            <th align="center">binary image</th>
+            <th align="center">Warped Image</th>
+            <th align="center">Binary Image</th>
         </tr>
         <tr>
             <td><img src="assets/processes/warped_frame.jpg"></td>
@@ -77,8 +77,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     4. ### extracting initial coordinates of the lane center using histogram peaks
     <table style="table-layout: auto;">
         <tr>
-            <th align="center">binary image</th>
-            <th align="center">histogram peaks image</th>
+            <th align="center">Binary Image</th>
+            <th align="center">Histogram Peaks Image</th>
         </tr>
         <tr>
             <td><img src="assets/processes/pixels_histogram.jpg"></td>
@@ -89,8 +89,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     5. ### applying sliding window algorithm locating lane points x, y coordinates
     <table style="table-layout: auto;">
         <tr>
-            <th align="center">binary image</th>
-            <th align="center">sliding window algorithm image</th>
+            <th align="center">Binary Image</th>
+            <th align="center">Sliding Window Algorithm</th>
         </tr>
         <tr>
             <td><img src="assets/processes/binary_frame.jpg"></td>
@@ -101,8 +101,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     6. ### fitting 2nd-order polynomyal equation of the sliding window x, y coordinates 
     <table style="table-layout: auto;">
         <tr>
-            <th align="center">binary image</th>
-            <th align="center">histogram peaks image</th>
+            <th align="center">Scaned Image</th>
+            <th align="center">Fitted Lane Boundries</th>
         </tr>
         <tr>
             <td><img src="assets/processes/scaned_frame.jpg"></td>
@@ -113,7 +113,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     7. ### calculating radius of curvature
     <table style="table-layout: auto;">
         <tr>
-            <th align="center">lane dimensions in meter</th>
+            <th align="center">Lane Dimensions in meter</th>
         </tr>
         <tr>
             <td><img src="assets/processes/dimensions_frame.jpg"></td>
@@ -139,7 +139,9 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     `HogModel` is excutable package can be run given command arguments   
 
     supported arguments:   
-    - **`path`**: the image/video to be analyzed   
+    - **`-p --path`**: the image/video to be analyzed (required) argument   
+    - **`-s --save`**: saving rendered roject output video (default is False)
+    - **`-n --name`**: the output file name and extension (default is output_video.mp4)
     </br>   
 
     ```bash  
@@ -151,7 +153,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
 
 - ## System Constraints
   - sensitive to shadows and high luminant environments
-  - ssensitive to bad weather conditions    
+  - sensitive to extreme weather conditions    
   
 - ## Future Work   
     using Deep learning semantic segmentation to build more robust algorithm that stands out in hard weather conditions
@@ -171,7 +173,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
 >    https://www.youtube.com/watch?v=r8G0n5LeJo0    
 >   https://topclassactions.com/lawsuit-settlements/consumer-products/auto-news/what-is-lane-keep-assist/    
 >
->    Lane Dimensions standards    
+>    Lane Dimensions Standards    
 >    http://www.ctp.gov.in/RoadMarkings.htm   
     
     
