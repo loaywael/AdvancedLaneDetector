@@ -39,12 +39,12 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
 </br></br>   
 
 - ## Processes Analysis
-    This section will briefly explain how the algorithim works step by step
+    > This section will briefly explain how the algorithim works step by step
     
     1. ### Camera Model Calibration
        - **Pinhole Camera Model**   
-       Transforming 3D-space real world scenes into 2D-space images using homogeneos coordinates,   
-       to do so the focal length, optical center, and radial distortion coefficients of the lens must be know first using a calibration method.   
+       > Transforming 3D-space real world scenes into 2D-space images using homogeneos coordinates,   
+       > to do so the focal length, optical center, and radial distortion coefficients of the lens must be know first using a calibration method.   
        
         <img src="https://prateekvjoshi.files.wordpress.com/2014/05/3-pinhole-camera-geometry.png" align="center">  
         <img src="https://www.joshuanava.biz/perspective/images/1850_32_76-diagram-foreshortening.jpg">   
@@ -65,7 +65,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
                 - 3D object with known shape and size   
            - Second Method: Assumes no known object in 3D-space   
                 - Taking multiple views with differnt angles and positions of a specific scene like 8x8 Chessboard    
-                - Computing the relative camera rotation and translation by using undo adjustment it tweaks at least 8 2D points for all views   
+                - Computing the relative camera rotation and translation by using undo adjustment it tweaks at least 8 2D points for all views
                 and compare them in all the views leading to estimate the 3D scene structure.   
           
        
@@ -84,13 +84,13 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
        - **Camera Model Calibration**   
            having all the information (parameters or coefficients) about the camera required to determine an accurate relationship between a 3D point in the real            world and its corresponding 2D projection (pixel) in the image captured by that calibrated camera.   
          
-           1. Internal parameters of the camera/lens system. E.g. focal length, optical center, and radial distortion coefficients of the lens.   
-           2. External parameters : This refers to the orientation (rotation and translation) of the camera with respect to some world coordinate system.  
+             1. Internal parameters of the camera/lens system. E.g. focal length, optical center, and radial distortion coefficients of the lens.   
+             2. External parameters : This refers to the orientation (rotation and translation) of the camera with respect to some world coordinate system.  
            
-       - **Approach**   
+       - #### **Approach**   
            =======    
-           Using Chessboard images of different size and view angle, then using corner detector to locate corner points of the board
-           that are given as the input and the return is the calibrated camera matrix which will be use to undistort any other image.   
+           > Using Chessboard images of different size and view angle, then using corner detector to locate corner points of the board
+           > that are given as the input and the return is the calibrated camera matrix which will be use to undistort any other image.   
            
         <table>
             <tr>
@@ -100,8 +100,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
         </br>   
     
     2. ### Prespective Projection
-    In order to fit a curve that represent the lane lines the lines should appear parallel in the image plane   
-    to achieve prospective projection is applied to warp the prespective view to a bird view that visualizes parallel lines parallel.   
+    > In order to fit a curve that represent the lane lines the lines should appear parallel in the image plane   
+    > to achieve prospective projection is applied to warp the prespective view to a bird view that visualizes parallel lines parallel.   
     
     <table style="table-layout: auto;">
         <tr>
@@ -116,8 +116,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     </br>   
     
     3. ### Binary Masking
-    Blocking out any details in the image except the lane lines by thresholding Saturation, and Blue color channels   
-    then combining the result with edge detector and using that mask to be scanned to extract lane line x, y coordinates.   
+    > Blocking out any details in the image except the lane lines by thresholding Saturation, and Blue color channels   
+    > then combining the result with edge detector and using that mask to be scanned to extract lane line x, y coordinates.   
     
     <table style="table-layout: auto;">
         <tr>
@@ -132,8 +132,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     </br>    
     
     4. ### Histogram Peaks
-    Computing pixels histogram along the x-axis for the bottom half of the image where the lanes should be found    
-    using the maximum peaks of the histogram as the initial location of the center of the lane lines.   
+    > Computing pixels histogram along the x-axis for the bottom half of the image where the lanes should be found    
+    > using the maximum peaks of the histogram as the initial location of the center of the lane lines.   
     
     <table style="table-layout: auto;">
         <tr>
@@ -148,8 +148,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     </br>   
     
     5. ### Sliding Window
-    Sliding a fixed size window starting from the initial centers computed from step-4 that computes the mean of all pixels
-    within the current window position and append the current window location to lane line coordinates only if the mean > given pixel value threshold.   
+    > Sliding a fixed size window starting from the initial centers computed from step-4 that computes the mean of all pixels
+    > within the current window position and append the current window location to lane line coordinates only if the mean > given pixel value threshold.   
     
     <table style="table-layout: auto;">
         <tr>
@@ -164,7 +164,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     </br>   
     
     6. ### Polynomyal Regression
-    Using 2nd order regression to fit the lane line curve that marks the lane left and right boundries.   
+    > Using 2nd order regression to fit the lane line curve that marks the lane left and right boundries.   
     
     <table style="table-layout: auto;">
         <tr>
@@ -179,11 +179,11 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     </br>   
     
     7. ### Radius of Curvature
-    Radius of curvature is obtained by the formula:    
+    > Radius of curvature is obtained by the formula:    
     
-    <img src="https://render.githubusercontent.com/render/math?math=R = \frac {(1 + (2AY + B)^2)^\frac{3}{2}} {|2A|}" width="300%" align="center">      
+    <img src="https://render.githubusercontent.com/render/math?math=R = \frac {(1 + (2AY + B)^2)^\frac{3}{2}} {|2A|}" width="100%" align="center">      
     Y values are in pixels to map the radius from pixels to meters it is multiplied by 
-    <img src="https://render.githubusercontent.com/render/math?math=px2meter = {30\over720}" width="300%" align="right">
+    <img src="https://render.githubusercontent.com/render/math?math=px2meter = {30\over720}" width="100%" align="right">
 
     <table style="table-layout: auto;">
         <tr>
