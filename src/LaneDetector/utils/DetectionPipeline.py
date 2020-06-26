@@ -105,4 +105,4 @@ class Pipeline(Detector):
         fullBoard = Pipeline.getPipeLineBoard(dstImg1, dstImg2, dstImg3, dstImg4, 0.5)
         detection = self.applyLaneMasks(X, dstImg2.astype("uint8"))
 
-        return dstImg2#fullBoard
+        return fullBoard#fullBoard
