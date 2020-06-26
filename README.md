@@ -48,15 +48,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
        
         <img src="https://prateekvjoshi.files.wordpress.com/2014/05/3-pinhole-camera-geometry.png" align="center">  
         <img src="https://www.joshuanava.biz/perspective/images/1850_32_76-diagram-foreshortening.jpg">   
-              
-        <table>
-            <tr>
-                <td><img src="https://www.mathworks.com/help/vision/ug/camera_calibration_focal_point.png"></td>
-                <td><img src="https://www.mathworks.com/help/vision/ug/calibration_cameramodel_coords.png"></td>
-                <td><img src="https://www.mathworks.com/help/vision/ug/calibration_camera_matrix.png"></td>
-            </tr>
-        </table>
-        </br>   
+        </br></br>   
         
        - **Calibration Methods**   
            - **Frist Method**: Requires knowing something about the object in the real world 3D-space by satisfying one of:   
@@ -71,18 +63,26 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
                 - Taking multiple views with differnt angles and positions of a specific scene like 8x8 Chessboard    
                 - Computing the relative camera rotation and translation by using undo adjustment it tweaks at least 8 2D points for all views
                 and compare them in all the views leading to estimate the 3D scene structure.   
-          
-       
+           </br>     
+          <table>
+            <tr>
+                <td><img src="https://www.mathworks.com/help/vision/ug/camera_calibration_focal_point.png"></td>
+                <td><img src="https://www.mathworks.com/help/vision/ug/calibration_cameramodel_coords.png"></td>
+                <td><img src="https://www.mathworks.com/help/vision/ug/calibration_camera_matrix.png"></td>
+            </tr>
+          </table>    
+          </br>   
+           
        - **Image Distortion**:    
             - Radial Distortion Bended Edges: Due to camera lens light rays often bend too much, or little at the edges
             - Tangential Distortion Stretched Image: When camera not aligned parallel to objects
-            - Both Radial and Tangential Distortions
+            - Both Radial and Tangential Distortions     
             
-         - Pros   
-         ======   
+         - **Pros**   
+         ====   
              - Becomes usefull for capturing wide angle fish eye scene   
-         - Cons    
-         ======   
+         - **Cons**    
+         ====   
              - Affects apparent size, and shape of objects   
              
        - **Camera Model Calibration**   
@@ -235,7 +235,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
   - sensitive to extreme weather conditions    
   
 - ## Future Work   
-    using Deep learning semantic segmentation to build more robust algorithm that stands out in hard weather conditions
+    Applying deep learning semantic segmentation to build more robust algorithm that stands out in hard weather conditions
 ***
     
 # REFERENCES   
