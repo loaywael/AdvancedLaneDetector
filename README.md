@@ -63,15 +63,6 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
                 - Taking multiple views with differnt angles and positions of a specific scene like 8x8 Chessboard    
                 - Computing the relative camera rotation and translation by using undo adjustment it tweaks at least 8 2D points for all views
                 and compare them in all the views leading to estimate the 3D scene structure.   
-           </br>     
-          <table>
-            <tr>
-                <td><img src="https://www.mathworks.com/help/vision/ug/camera_calibration_focal_point.png"></td>
-                <td><img src="https://www.mathworks.com/help/vision/ug/calibration_cameramodel_coords.png"></td>
-                <td><img src="https://www.mathworks.com/help/vision/ug/calibration_camera_matrix.png"></td>
-            </tr>
-          </table>    
-          </br>   
            
        - **Image Distortion**:    
             - Radial Distortion Bended Edges: Due to camera lens light rays often bend too much, or little at the edges
@@ -90,6 +81,16 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
          
              1. Internal parameters of the camera/lens system. E.g. focal length, optical center, and radial distortion coefficients of the lens.   
              2. External parameters : This refers to the orientation (rotation and translation) of the camera with respect to some world coordinate system.  
+             
+          </br>     
+          <table>
+            <tr>
+                <td><img src="https://www.mathworks.com/help/vision/ug/camera_calibration_focal_point.png"></td>
+                <td><img src="https://www.mathworks.com/help/vision/ug/calibration_cameramodel_coords.png"></td>
+                <td><img src="https://www.mathworks.com/help/vision/ug/calibration_camera_matrix.png"></td>
+            </tr>
+          </table>    
+          </br>   
            
        - #### **Approach**   
            =======    
