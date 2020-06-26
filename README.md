@@ -41,8 +41,8 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
 - ## Processes Analysis
     This section will briefly explain how the algorithim works step by step
     
-    1. ### Undistorting camera model
-       **Pinhole Camera Model**   
+    1. ### Camera Model Calibration
+       - **Pinhole Camera Model**   
        Transforming 3D-space real world scenes into 2D-space images using homogeneos coordinates,   
        to do so the focal length, optical center, and radial distortion coefficients of the lens must be know first using a calibration method.   
        
@@ -58,7 +58,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
         </table>
         </br>   
         
-       **Calibration Methods**   
+       - **Calibration Methods**   
            - Frist Method: Requires knowing something about the object in the real world 3D-space by satisfying one of:   
                 - Vanishing Points   
                 - 2D planar known object   
@@ -69,7 +69,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
                 and compare them in all the views leading to estimate the 3D scene structure.   
           
        
-       **Image Distortion**:    
+       - **Image Distortion**:    
             - Radial Distortion Bended Edges: Due to camera lens light rays often bend too much, or little at the edges
             - Tangential Distortion Stretched Image: When camera not aligned parallel to objects
             - Both Radial and Tangential Distortions
@@ -81,13 +81,13 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
          ======   
              - Affects apparent size, and shape of objects   
              
-         **Camera Model Calibration**   
+       - **Camera Model Calibration**   
            having all the information (parameters or coefficients) about the camera required to determine an accurate relationship between a 3D point in the real            world and its corresponding 2D projection (pixel) in the image captured by that calibrated camera.   
          
            1. Internal parameters of the camera/lens system. E.g. focal length, optical center, and radial distortion coefficients of the lens.   
            2. External parameters : This refers to the orientation (rotation and translation) of the camera with respect to some world coordinate system.  
            
-          **Approach**   
+       - **Approach**   
            =======    
            Using Chessboard images of different size and view angle, then using corner detector to locate corner points of the board
            that are given as the input and the return is the calibrated camera matrix which will be use to undistort any other image.   
@@ -97,8 +97,9 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
                 <td><img src="assets/processes/undistortion.png"></td>
             </tr>
         </table>
+        </br>   
     
-    2. ### warping Region of Interest (ROI) to bird view   
+    2. ### Prespective Projection
     In order to fit a curve that represent the lane lines the lines should appear parallel in the image plane   
     to achieve prospective projection is applied to warp the prespective view to a bird view that visualizes parallel lines parallel.   
     
@@ -112,8 +113,9 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             <td><img src="assets/processes/bird_frame.jpg"</td>
         </tr>
     </table>    
+    </br>   
     
-    3. ### extracting lanes binary mask (edge/color) thresholding   
+    3. ### Binary Masking
     Blocking out any details in the image except the lane lines by thresholding Saturation, and Blue color channels   
     then combining the result with edge detector and using that mask to be scanned to extract lane line x, y coordinates.   
     
@@ -127,8 +129,9 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             <td><img src="assets/processes/binary_frame.jpg"</td>
         </tr>
     </table>   
+    </br>    
     
-    4. ### extracting initial coordinates of the lane center using histogram peaks   
+    4. ### Histogram Peaks
     Computing pixels histogram along the x-axis for the bottom half of the image where the lanes should be found    
     using the maximum peaks of the histogram as the initial location of the center of the lane lines.   
     
@@ -142,8 +145,9 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             <td><img src="assets/processes/histogram_peaks.jpg"</td>
         </tr>
     </table>   
+    </br>   
     
-    5. ### applying sliding window algorithm locating lane points x, y coordinates   
+    5. ### Sliding Window
     Sliding a fixed size window starting from the initial centers computed from step-4 that computes the mean of all pixels
     within the current window position and append the current window location to lane line coordinates only if the mean > given pixel value threshold.   
     
@@ -156,9 +160,10 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             <td><img src="assets/processes/binary_frame.jpg"></td>
             <td><img src="assets/processes/sliding_window.gif"</td>
         </tr>
-    </table>   
+    </table>  
+    </br>   
     
-    6. ### fitting 2nd-order polynomyal equation of the sliding window x, y coordinates   
+    6. ### Polynomyal Regression
     Using 2nd order regression to fit the lane line curve that marks the lane left and right boundries.   
     
     <table style="table-layout: auto;">
@@ -171,12 +176,14 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             <td><img src="assets/processes/lane_boundry.jpg"</td>
         </tr>
     </table>   
+    </br>   
     
-    7. ### calculating radius of curvature   
+    7. ### Radius of Curvature
     Radius of curvature is obtained by the formula:    
     
-    $R = {(1 + (2AY + B)^2)^{3\over2}\over|2A|}$       
-    Y values are in pixels to map the radius from pixels to meters it is multiplied by $$px2meter = {30\over720}$$
+    <img src="https://render.githubusercontent.com/render/math?math=R = \frac {(1 + (2AY + B)^2)^\frac{3}{2}} {|2A|}" width="300%" align="center">      
+    Y values are in pixels to map the radius from pixels to meters it is multiplied by 
+    <img src="https://render.githubusercontent.com/render/math?math=px2meter = {30\over720}" width="300%" align="right">
 
     <table style="table-layout: auto;">
         <tr>
@@ -186,6 +193,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
             <td><img src="assets/processes/dimensions_frame.jpg"></td>
         </tr>
     </table>   
+    </br></br>   
     
 - ## Project Setup and Requirements   
     **`use python3.5`** or newer versions to install and run the package  
