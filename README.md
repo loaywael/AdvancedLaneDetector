@@ -65,7 +65,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
                 - 3D object with known shape and size   
            </br>
            <img src="http://www.antoniosiber.org/perspektiva_navjestenja/perspektiva_navjestenja_1.jpg">   
-           </br>   
+           </br></br>   
            
            - Second Method: Assumes no known object in 3D-space   
                 - Taking multiple views with differnt angles and positions of a specific scene like 8x8 Chessboard    
