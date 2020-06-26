@@ -121,7 +121,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     </br>   
     
     3. ### Binary Masking
-    > Blocking out any details in the image except the lane lines by thresholding Saturation, and Blue color channels   
+    > Blocking out any details in the image except the lane lines by thresholding Saturation, and Blue color channels
     > then combining the result with edge detector and using that mask to be scanned to extract lane line x, y coordinates.   
     
     <table style="table-layout: auto;">
@@ -137,7 +137,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     </br>    
     
     4. ### Histogram Peaks
-    > Computing pixels histogram along the x-axis for the bottom half of the image where the lanes should be found    
+    > Computing pixels histogram along the x-axis for the bottom half of the image where the lanes should be found
     > using the maximum peaks of the histogram as the initial location of the center of the lane lines.   
     
     <table style="table-layout: auto;">
