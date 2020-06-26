@@ -59,7 +59,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
         </br>   
         
        - **Calibration Methods**   
-           - Frist Method: Requires knowing something about the object in the real world 3D-space by satisfying one of:   
+           - **Frist Method**: Requires knowing something about the object in the real world 3D-space by satisfying one of:   
                 - Vanishing Points   
                 - 2D planar known object   
                 - 3D object with known shape and size   
@@ -67,7 +67,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
            <img src="http://www.antoniosiber.org/perspektiva_navjestenja/perspektiva_navjestenja_1.jpg">   
            </br></br>   
            
-           - Second Method: Assumes no known object in 3D-space   
+           - **Second Method**: Assumes no known object in 3D-space   
                 - Taking multiple views with differnt angles and positions of a specific scene like 8x8 Chessboard    
                 - Computing the relative camera rotation and translation by using undo adjustment it tweaks at least 8 2D points for all views
                 and compare them in all the views leading to estimate the 3D scene structure.   
@@ -238,7 +238,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     using Deep learning semantic segmentation to build more robust algorithm that stands out in hard weather conditions
 ***
     
-# REFERENCES
+# REFERENCES   
 
 > Thanks for these references I was able to get over problems I've faced during implementation.   
 >   
@@ -255,15 +255,14 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
 >    Lane Dimensions Standards    
 >    http://www.ctp.gov.in/RoadMarkings.htm   
 > 
->    Image Formation - Pinhole Camera Model
+>    Image Formation - Pinhole Camera Model   
 >    https://www.youtube.com/watch?v=nOQvjG7Jbao   
 >
->    Camera Model Calibration
->    https://www.learnopencv.com/camera-calibration-using-opencv/
->    https://www.mathworks.com/help/vision/ug/camera-calibration.html
-
+>    Camera Model Calibration   
+>    https://www.learnopencv.com/camera-calibration-using-opencv/   
+>    https://www.mathworks.com/help/vision/ug/camera-calibration.html   
 >
->    Perspective projection
+>    Perspective projection   
 >    https://www.youtube.com/watch?v=17kqhGRDHc8   
     
     
