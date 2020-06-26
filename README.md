@@ -63,7 +63,9 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
                 - Vanishing Points   
                 - 2D planar known object   
                 - 3D object with known shape and size   
+           </br>
            <img src="http://www.antoniosiber.org/perspektiva_navjestenja/perspektiva_navjestenja_1.jpg">   
+           </br>   
            
            - Second Method: Assumes no known object in 3D-space   
                 - Taking multiple views with differnt angles and positions of a specific scene like 8x8 Chessboard    
@@ -182,10 +184,10 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     
     7. ### Radius of Curvature
     > Radius of curvature is obtained by the formula:    
-    <img src="https://render.githubusercontent.com/render/math?math=R = \frac {(1 + (2AY + B)^2)^\frac{3}{2}} {|2A|}" width="50%" align="center">      
+    <img align="center" src="https://quicklatex.com/cache3/55/ql_20aa7d62cfc2861d025d1bb2f4f3a455_l3.png" width="50%">      
     
     Y values are in pixels to map the radius from pixels to meters it is multiplied by 
-    <img src="https://render.githubusercontent.com/render/math?math=px2meter = {30\over720}" width="15%" align="right">
+    <img src="https://render.githubusercontent.com/render/math?math=px2meter = {30\over720}" width="15%">
 
     <table style="table-layout: auto;">
         <tr>
