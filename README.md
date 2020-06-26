@@ -181,9 +181,9 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
     7. ### Radius of Curvature
     > Radius of curvature is obtained by the formula:    
     
-    <img src="https://render.githubusercontent.com/render/math?math=R = \frac {(1 + (2AY + B)^2)^\frac{3}{2}} {|2A|}" width="100%" align="center">      
+    <img src="https://render.githubusercontent.com/render/math?math=R = \frac {(1 + (2AY + B)^2)^\frac{3}{2}} {|2A|}" width="50%" align="center">      
     Y values are in pixels to map the radius from pixels to meters it is multiplied by 
-    <img src="https://render.githubusercontent.com/render/math?math=px2meter = {30\over720}" width="100%" align="right">
+    <img src="https://render.githubusercontent.com/render/math?math=px2meter = {30\over720}" width="50%" align="right">
 
     <table style="table-layout: auto;">
         <tr>
