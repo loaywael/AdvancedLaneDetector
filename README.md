@@ -216,7 +216,7 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
 
 
 - ## How to Use   
-    `HogModel` is excutable package can be run given command arguments   
+    `LaneDetector` is excutable package can be run given command arguments   
 
     supported arguments:   
     - **`-p --path`**: the image/video to be analyzed (required) argument   
