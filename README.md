@@ -12,14 +12,14 @@ Providing brief gentle inputs to the steering wheel to help avoid drifting out o
 <img align="middle" src="assets/project_demo.gif" alt="lane detected in green" style="width: 100%;"/>
 <table>
     <tr>
-        <td><img src="assets/pipeline_demo.gif" alt="lane detected in green" style="width: 250px;"/></td>
-        <td><img src="assets/pipeline2_demo.gif" alt="lane detected in green" style="width: 250px;"/></td>
+        <td><img src="assets/pipeline_demo.gif" alt="lane detected in green" style="width: 100%;"/></td>
+        <td><img src="assets/pipeline2_demo.gif" alt="lane detected in green" style="width: 100%;"/></td>
     </tr>
 </table>
 <table>
     <tr>
-        <td><img src="assets/test1.png" alt="lane detected in green" style="width: 250px;"/></td>
-        <td><img src="assets/test2.png" alt="lane detected in green" style="width: 250px;"/></td>
+        <td><img src="assets/test1.png" alt="lane detected in green" style="width: 100%;"/></td>
+        <td><img src="assets/test2.png" alt="lane detected in green" style="width: 100%;"/></td>
     </tr>
 </table>
 </br></br>
